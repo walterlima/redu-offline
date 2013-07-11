@@ -10,10 +10,13 @@ namespace ReduOffline
 {
     class ReduClientOnline : UserFunctions<User>
     {
+        public static String BASE_URL = "";
+        public 
 
         public User getUser(string user_id)
         {
             throw new NotImplementedException();
+
         }
 
         public User getMe()
