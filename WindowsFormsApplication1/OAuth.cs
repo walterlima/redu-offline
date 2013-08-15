@@ -90,7 +90,7 @@ namespace OAuth
             _params["signature"] = "";
             _params["token"] = "";
             _params["token_secret"] = "";
-            _params["version"] = "1.0";
+            _params["version"] = "2.0";
         }
 
         /// <summary>

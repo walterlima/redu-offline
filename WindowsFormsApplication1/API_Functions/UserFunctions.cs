@@ -8,13 +8,13 @@ using ReduOffline.Models;
 
 namespace ReduOffline.API_Functions
 {
-    interface UserFunctions<T>
+    interface UserFunctions
     {
 
-        public T getUser(String user_id);
+        User get_user(String user_id);
 
-        public T getMe();
+        User get_me();
 
-        public List<T> getUsersBySpace(String space_id, String role);
+        List<User> getUsersBySpace(String space_id, String role);
     }
 }

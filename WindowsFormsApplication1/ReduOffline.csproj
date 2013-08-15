@@ -32,11 +32,18 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>WindowsFormsApplication1.Program</StartupObject>
+    <StartupObject>ReduOffline.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.5.0.6\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="RestSharp">
+      <HintPath>..\packages\RestSharp.104.1\lib\net4\RestSharp.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -55,12 +62,21 @@
     <Compile Include="API_Functions\SpaceFunctions.cs" />
     <Compile Include="API_Functions\SubjectFunctions.cs" />
     <Compile Include="API_Functions\UserFunctions.cs" />
+    <Compile Include="Constants.cs" />
+    <Compile Include="Contants.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Contants.resx</DependentUpon>
+    </Compile>
+    <Compile Include="HttpRequests.cs" />
     <Compile Include="Models\Course.cs" />
-    <Compile Include="Models\Enrollement.cs" />
-    <Compile Include="Models\Environment.cs" />
-    <Compile Include="Models\File.cs" />
+    <Compile Include="Models\Enrollment.cs" />
+    <Compile Include="Models\EnvironmentRedu.cs" />
+    <Compile Include="Models\Lecture.cs" />
     <Compile Include="Models\Link.cs" />
+    <Compile Include="Models\Social_Network.cs" />
     <Compile Include="Models\Space.cs" />
+    <Compile Include="Models\Status.cs" />
     <Compile Include="Models\Subject.cs" />
     <Compile Include="Models\Thumbnail.cs" />
     <Compile Include="Models\User.cs" />
@@ -76,7 +92,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReduClientOffline.cs" />
     <Compile Include="ReduClientOnline.cs" />
+    <Compile Include="Tools\DynamicJson.cs" />
     <Compile Include="Tracing.cs" />
+    <Compile Include="XMLReader.cs" />
+    <Compile Include="XMLWriter.cs" />
+    <EmbeddedResource Include="Contants.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Contants.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
@@ -90,6 +113,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

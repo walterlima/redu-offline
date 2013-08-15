@@ -6,10 +6,31 @@ using System.Threading.Tasks;
 
 namespace ReduOffline.Models
 {
-    class Thumbnail
+    public class Thumbnail
     {
-        public String Size { get; set; }
-        public String Href { get; set; }
+        public Thumbnail()
+        {
+        }
+        public Thumbnail(String href, String size)
+        {
+            _href = href;
+            _size = size;
+        }
+
+        private String _href;
+        private String _size;
+
+        public String Href
+        {
+            get { return _href; }
+            set { _href = value; }
+        }
+
+        public String Size
+        {
+            get { return _size; }
+            set { _size = value; }
+        }
 
     }
 }

@@ -6,25 +6,21 @@ using System.Threading.Tasks;
 
 namespace ReduOffline.Models
 {
-    public class Space
+    public class EnvironmentRedu
     {
 
-        public Space() { }
+        public EnvironmentRedu() { }
 
         private String _id;
         private String _name;
+        private String _initials;
+        private String _path;
         private String _description;
+        private String _course_count;
         private String _created_at;
+        private List<Thumbnail> _thumbnails;
         private List<Link> _links;
-        private List<Subject> _subjects;
-        private List<Status> _timeline;
-        private Course _parent_course;
-
-        public Course Parent_Course
-        {
-            get { return _parent_course; }
-            set { _parent_course = value; }
-        }
+        private List<Course> _courses;
 
         public String Id
         {
@@ -37,17 +33,41 @@ namespace ReduOffline.Models
             get { return _name; }
             set { _name = value; }
         }
+
+        public String Initials
+        {
+            get { return _initials; }
+            set { _initials = value; }
+        }
         
+        public String Path
+        {
+            get { return _path; }
+            set { _path = value; }
+        }
+
         public String Description
         {
             get { return _description; }
             set { _description = value; }
         }
         
-        public String Created_at
+        public String Course_Count
+        {
+            get { return _course_count; }
+            set { _course_count = value; }
+        }
+        
+        public String Created_At
         {
             get { return _created_at; }
             set { _created_at = value; }
+        }
+
+        public List<Thumbnail> Thumbnails
+        {
+            get { return _thumbnails; }
+            set { _thumbnails = value; }
         }
         
         public List<Link> Links
@@ -56,16 +76,10 @@ namespace ReduOffline.Models
             set { _links = value; }
         }
         
-        public List<Subject> Subjects
+        public List<Course> Courses
         {
-            get { return _subjects; }
-            set { _subjects = value; }
-        }
-
-        public List<Status> Timeline
-        {
-            get { return _timeline; }
-            set { _timeline = value; }
+            get { return _courses; }
+            set { _courses = value; }
         }
     }
 }
