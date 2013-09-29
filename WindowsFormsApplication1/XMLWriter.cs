@@ -21,9 +21,9 @@ namespace ReduOffline
 
         public void save_user_data(User user, List<Status> feed)
         {
-            if (!File.Exists(Constants.XML_USER_FOLDER + "\\" + user.Login + ".xml"))
+            if (!File.Exists(String.Format(Constants.XML_USER_PATH, user.Login)))
             {
-                serialize_and_save_xml<List<Status>>(feed, Constants.XML_USER_FOLDER + "\\" + user.Login + ".xml");
+                serialize_and_save_xml<User>(user, String.Format(Constants.XML_USER_PATH, user.Login));
                 //XmlNode xml_user_config_root = xml_user_config.CreateElement("config");
                 //xml_user_config.AppendChild(declaration);
                 //xml_user_config.AppendChild(xml_user_config_root);
@@ -31,7 +31,7 @@ namespace ReduOffline
             }
             if (!File.Exists(string.Format(Constants.XML_USER_TIMELINE_PATH, user.Login)))
             {
-                feed.OrderByDescending(p => p.Created_At);
+                feed = feed.OrderBy(p => p.Created_At).ToList();
                 serialize_and_save_xml<List<Status>>(feed, string.Format(Constants.XML_USER_TIMELINE_PATH, user.Login));
             }
         }
@@ -65,9 +65,11 @@ namespace ReduOffline
                 {
                     if (!Directory.Exists(string.Format(Constants.XML_SPACE_FOLDER, ava.Initials, course.Name, space.Name)))
                     {
-                        Directory.CreateDirectory(string.Format(Constants.XML_SPACE_FOLDER, ava.Initials, course.Name, space.Name));
+                        Directory.CreateDirectory(string.Format(Constants.XML_SPACE_FOLDER, ava.Initials, course.Name, space.Name));                        
                         List<Subject> subject_backup = space.Subjects;
                         space.Subjects = null;
+                        serialize_and_save_xml<List<Status>>(space.Timeline, string.Format(Constants.XML_SPACE_TIMELINE_PATH, ava.Initials, course.Name, space.Name, space.Id));
+                        space.Timeline = null;
                         serialize_and_save_xml<Space>(space, string.Format(Constants.XML_SPACE_PATH, ava.Initials, course.Name, space.Name, space.Id));
                         space.Subjects = subject_backup;
                     }
@@ -83,13 +85,17 @@ namespace ReduOffline
                         }
                         foreach (Lecture lecture in subject.Lectures)
                         {
-                            if (!File.Exists(string.Format(Constants.XML_LECTURE_PATH, ava.Initials, course.Name, space.Name, subject.Id, lecture.Id)))
+                            if (!Directory.Exists(string.Format(Constants.XML_LECTURE_FOLDER, ava.Initials, course.Name, space.Name, subject.Id, lecture.Id)))
                             {
-                                serialize_and_save_xml<Lecture>(lecture, string.Format(Constants.XML_LECTURE_PATH, ava.Initials, course.Name, space.Name, subject.Id, lecture.Id));
+                                Directory.CreateDirectory(string.Format(Constants.XML_LECTURE_FOLDER, ava.Initials, course.Name, space.Name, subject.Id, lecture.Id));
+                                serialize_and_save_xml<List<Status>>(lecture.Timeline, string.Format(Constants.XML_LECTURE_TIMELINE_PATH, ava.Initials, course.Name, space.Name, subject.Id, lecture.Id, lecture.Id));
+                                lecture.Timeline = null;
+                                serialize_and_save_xml<Lecture>(lecture, string.Format(Constants.XML_LECTURE_PATH, ava.Initials, course.Name, space.Name, subject.Id, lecture.Id, lecture.Id));
                             }
                         }
                     }
                 }
+            
             }            
         }
 
@@ -110,6 +116,36 @@ namespace ReduOffline
         public void save_lecture_data()
         {
             //not at the moment
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="statuses"></param>
+        /// <param name="path"></param>
+        public void write_new_statuses(List<Status> statuses, string path)
+        {
+            serializer = new System.Xml.Serialization.XmlSerializer(typeof(List<Status>));
+            XmlDocument doc_new_statuses = new XmlDocument();
+            XmlDocument doc_old_statuses = new XmlDocument();
+            string xmldata = "";
+            
+            using (StringWriter writer = new Utf8StringWriter())
+            {
+                serializer.Serialize(writer, statuses);
+                xmldata = writer.ToString();
+            }
+
+            doc_old_statuses.Load(path);
+            doc_new_statuses.LoadXml(xmldata);
+
+            foreach (XmlNode node in doc_new_statuses.DocumentElement.ChildNodes)
+            {
+                var newNode = doc_old_statuses.ImportNode(node, true);
+                doc_old_statuses.DocumentElement.AppendChild(newNode);
+            }
+
+            doc_old_statuses.Save(path);
         }
 
         public class Utf8StringWriter : StringWriter

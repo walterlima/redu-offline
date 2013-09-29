@@ -22,24 +22,24 @@ namespace ReduOffline.Models
         private String _rel;
         private String _href;
 
-        [XmlElement("Rel")]
+        [XmlElement("rel")]
         public String Rel 
         {
             get { return _rel; }
             set { _rel = value; }
         }
 
-        [XmlElement("Href")]
+        [XmlElement("href")]
         public String Href 
         {
             get { return _href; }
             set { _href = value; }
         }
 
-        [XmlElement("Name")]
+        [XmlElement("name")]
         public String Name { get; set; }
 
-        [XmlElement("Permalink")]
+        [XmlElement("permalink")]
         public String Permalink { get; set; }
 
     }

@@ -44,9 +44,32 @@ namespace ReduOffline
             return content ;
         }
 
-        public string post()
+        public T post<T>(string post_url, string access_token, Dictionary<string, object> dic, String json) where T : new()
         {
-            return "";
+            if (post_url.Equals(string.Empty))
+            {
+                throw new ArgumentNullException("missing post url");
+            }
+
+            var request = new RestRequest(post_url, Method.POST);
+            request.AddHeader("Authorization", "OAuth " + access_token);
+            if (dic != null)
+            {
+                foreach (var pair in dic)
+                {
+                    request.AddParameter(pair.Key, pair.Value);
+                }
+            }
+            else
+            {                
+                request.AddParameter("application/json",json, ParameterType.RequestBody);
+            }
+
+            var response = _client.Execute<T>(request);
+
+            T content = response.Data;
+
+            return content;
         }
 
         public string delete()
@@ -60,11 +83,10 @@ namespace ReduOffline
         /// <param name="url">Download url</param>
         /// <param name="path">Destination in the local path system</param>
         public void download_file(string url, string path)
-        {
+        {            
             WebClient webClient = new WebClient();
-            webClient.DownloadFileCompleted += new AsyncCompletedEventHandler(done);
-            webClient.DownloadProgressChanged += new DownloadProgressChangedEventHandler(progress_done);
-            webClient.DownloadFileAsync(new Uri(url), path);
+            string file_name = this.format_url_download(url);
+            webClient.DownloadFile(url, path+"\\"+file_name);//possible to change index
         }
 
         private void progress_done(object sender, DownloadProgressChangedEventArgs e)
@@ -75,6 +97,26 @@ namespace ReduOffline
         private void done(object sender, AsyncCompletedEventArgs e)
         {
             //MessageBox.Show("Download efetuado!");
+        }
+
+        private string format_url_download(string url)
+        {
+            url = this.reverse_string(url);
+            int index = url.IndexOf('/');
+            string nova = url.Remove(index);
+            index = nova.IndexOf('?');
+            if (index >= 0)
+            {
+                nova = nova.Substring(index+1);
+            }            
+            return this.reverse_string(nova);
+        }
+
+        private string reverse_string(string s)
+        {
+            char[] charArray = s.ToCharArray();
+            Array.Reverse(charArray);
+            return new string(charArray);
         }
     }
 }

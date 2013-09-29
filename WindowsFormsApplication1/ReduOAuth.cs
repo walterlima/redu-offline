@@ -38,9 +38,9 @@ namespace ReduOffline
             {
                 Directory.CreateDirectory(Constants.XML_USER_FOLDER);
             }
-            if (!Directory.Exists(Constants.XML_TIMELINE_FOLDER))
+            if (!Directory.Exists(Constants.XML_USER_TIMELINE_FOLDER))
             {
-                Directory.CreateDirectory(Constants.XML_TIMELINE_FOLDER);
+                Directory.CreateDirectory(Constants.XML_USER_TIMELINE_FOLDER);
             }
             if (!Directory.Exists(Constants.XML_AVAS_FOLDER))
             {
@@ -67,46 +67,64 @@ namespace ReduOffline
             }
         }
         
-        public bool demand_authorize(String login)
+        public void demand_authorize(String login)
+        {            
+            _OAuth["consumer_key"] = Constants._consumerKey;
+            _OAuth["consumer_secret"] = Constants._consumerSecret;
+            System.Diagnostics.Process.Start(string.Format(Constants.AUTHORIZE_URL, Constants._consumerKey));
+        }
+
+        /// <summary>
+        /// Consults if a given user has already authorized the login in Redu
+        /// </summary>
+        /// <param name="login"></param>
+        /// <returns>True if it has authorized, False otherwise</returns>
+        public bool has_user_authorized(string login)
         {
             XmlNodeList node_list = _xml_user.GetElementsByTagName("user");
+            string _test_access_token = string.Empty;
             _login = login;
+
             foreach (XmlNode node in node_list)
             {
-                if(node.Attributes["login"].Value.Equals(login))
+                if (node.Attributes["login"].Value.Equals(login))
                 {
-                    _access_token = node["access-token"].InnerText.ToString();
+                    _test_access_token = node["access-token"].InnerText.ToString();
                     break;
                 }
             }
-            if (!_access_token.Equals(string.Empty))
+            _access_token = _test_access_token;
+            return !_test_access_token.Equals(string.Empty);            
+        }
+
+        public bool user_has_data(string login)
+        {
+            bool retorno = File.Exists(string.Format(Constants.XML_USER_PATH,  login));
+            return retorno;
+        }
+
+        public bool enter_authorization_pin(String pin)
+        {
+            HttpWebRequest _authorize_client = WebRequest.Create(string.Format(Constants.ACCESS_TOKEN_URL, pin, Constants._consumerKey, Constants._consumerSecret, Constants._grant_type)) as HttpWebRequest; //, _grant_type, _redirect_uri)) as HttpWebRequest;
+            HttpWebResponse _authorize_reponse = _authorize_client.GetResponse() as HttpWebResponse;
+            if (_authorize_reponse != null)
             {
+                using (_authorize_reponse)
+                {
+                    StreamReader reader = new StreamReader(_authorize_reponse.GetResponseStream());
+                    string vals = reader.ReadToEnd();
+                    vals = vals.Replace("\"", "");
+                    vals = vals.Trim('{', '}', '"', ' ');
+                    foreach (string token in vals.Split(','))
+                    {
+                        tokens.Add(token.Substring(0, token.IndexOf(":")), token.Substring(token.IndexOf(":") + 1, token.Length - token.IndexOf(":") - 1));
+                    }
+                }
+                add_new_user_acess_token(tokens);
                 return true;
             }
             else
-            {
-                _OAuth["consumer_key"] = Constants._consumerKey;
-                _OAuth["consumer_secret"] = Constants._consumerSecret;
-                System.Diagnostics.Process.Start(string.Format(Constants.AUTHORIZE_URL, Constants._consumerKey));
                 return false;
-            }
-        }
-
-        public void enter_authorization_pin(String pin)
-        {
-            HttpWebRequest _authorize_client = WebRequest.Create(string.Format(Constants.ACCESS_TOKEN_URL, pin, Constants._consumerKey, Constants._consumerSecret, Constants._grant_type)) as HttpWebRequest; //, _grant_type, _redirect_uri)) as HttpWebRequest;
-            using (HttpWebResponse _authorize_reponse = _authorize_client.GetResponse() as HttpWebResponse)
-            {
-                StreamReader reader = new StreamReader(_authorize_reponse.GetResponseStream());
-                string vals = reader.ReadToEnd();
-                vals = vals.Replace("\"", "");
-                vals = vals.Trim('{', '}', '"', ' ');
-                foreach (string token in vals.Split(','))
-                {
-                    tokens.Add(token.Substring(0, token.IndexOf(":")), token.Substring(token.IndexOf(":") + 1, token.Length - token.IndexOf(":") - 1));
-                }
-            }
-            add_new_user_acess_token(tokens);
         }
 
         private void add_new_user_acess_token(Dictionary<String, String> dic)
@@ -123,22 +141,14 @@ namespace ReduOffline
             new_user.AppendChild(path_info);
             root.AppendChild(new_user);
             _xml_user.Save(Constants.XML_USER_CONFIG_FOLDER);
+            _access_token = dic["access_token"];
 
         }
 
         public string get_access_token()
         {
             return _access_token;
-        }
-
-        [DllImport("wininet.dll")]
-        private extern static bool InternetGetConnectedState(out int Description, int ReservedValue);
-
-        public bool isConnected()
-        {
-            int desc;
-            return InternetGetConnectedState(out desc, 0);
-        }
+        }       
 
     }
 }

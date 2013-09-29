@@ -29,45 +29,53 @@ namespace ReduOffline.Models
         private String _role;
         private String _updated_at;
         private String _state;
+        private String _ava_name;
         private List<Link> _links;
 
-        [XmlElement("Id")]
+        [XmlElement("id")]
         public String Id
         {
             get { return _id; }
             set { _id = value; }
         }
 
-        [XmlElement("Created_At")]
+        [XmlElement("created-at")]
         public String Created_At
         {
             get { return _created_at; }
             set { _created_at = value; }
         }
 
-        [XmlElement("Role")]
+        [XmlElement("role")]
         public String Role
         {
             get { return _role; }
             set { _role = value; }
         }
 
-        [XmlElement("Updated_At")]
+        [XmlElement("updated-at")]
         public String Updated_At
         {
             get { return _updated_at; }
             set { _updated_at = value; }
         }
 
-        [XmlElement("State")]
+        [XmlElement("state")]
         public String State
         {
             get { return _state; }
             set { _state = value; }
         }
 
-        [XmlArray("Links")]
-        [XmlArrayItem("Link", typeof(Link))]
+        [XmlElement("ava-name")]
+        public String Ava_Name
+        {
+            get { return _ava_name; }
+            set { _ava_name = value; }
+        }
+
+        [XmlArray("links")]
+        [XmlArrayItem("link", typeof(Link))]
         public List<Link> Links
         {
             get { return _links; }

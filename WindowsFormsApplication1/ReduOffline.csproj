@@ -68,18 +68,37 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Contants.resx</DependentUpon>
     </Compile>
+    <Compile Include="StatusControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="StatusControl.Designer.cs">
+      <DependentUpon>StatusControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="StatusUser.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="StatusUser.Designer.cs">
+      <DependentUpon>StatusUser.cs</DependentUpon>
+    </Compile>
     <Compile Include="HttpRequests.cs" />
+    <Compile Include="images.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>images.resx</DependentUpon>
+    </Compile>
     <Compile Include="Models\Course.cs" />
     <Compile Include="Models\Enrollment.cs" />
     <Compile Include="Models\EnvironmentRedu.cs" />
     <Compile Include="Models\Lecture.cs" />
     <Compile Include="Models\Link.cs" />
+    <Compile Include="Models\PendingActivity.cs" />
     <Compile Include="Models\Social_Network.cs" />
     <Compile Include="Models\Space.cs" />
     <Compile Include="Models\Status.cs" />
     <Compile Include="Models\Subject.cs" />
     <Compile Include="Models\Thumbnail.cs" />
     <Compile Include="Models\User.cs" />
+    <Compile Include="Redu.cs" />
     <Compile Include="ReduOAuth.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
@@ -92,6 +111,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReduClientOffline.cs" />
     <Compile Include="ReduClientOnline.cs" />
+    <Compile Include="StatusLecture.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="StatusLecture.Designer.cs">
+      <DependentUpon>StatusLecture.cs</DependentUpon>
+    </Compile>
     <Compile Include="Tools\DynamicJson.cs" />
     <Compile Include="Tracing.cs" />
     <Compile Include="XMLReader.cs" />
@@ -100,8 +125,15 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Contants.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="StatusUser.resx">
+      <DependentUpon>StatusUser.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="images.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>images.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -113,6 +145,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="StatusLecture.resx">
+      <DependentUpon>StatusLecture.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -127,7 +162,27 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Resources\loading.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="loading-blue.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="loading_blue.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\loading_blue_24.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="loading_blue_24.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\ambientes.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\visao_geral.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

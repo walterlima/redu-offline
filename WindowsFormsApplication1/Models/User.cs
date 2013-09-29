@@ -3,15 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace ReduOffline.Models
 {
+    [Serializable()]
+    [XmlRoot("user")]
     public class User
     {
 
-        public User()
-        {
-        }
+        public User() { }
 
         public User(String login, String first_name, List<Link> links, String email, String birthday, String last_name, int friends_count,
                         int id, String mobile, List<Thumbnail> thumbnails, List<Social_Network> social_networks, String localization, String birth_localization, String updated_at)
@@ -49,90 +50,109 @@ namespace ReduOffline.Models
         private String _updated_at_local;
         private List<Enrollment> _enrollments;                
 
+        [XmlElement("login")]
         public String Login 
         {
             get { return _login; }
             set { _login = value; }
         }
 
+        [XmlElement("first-name")]
         public String First_Name
         {
             get { return _first_name; }
             set { _first_name = value; }
         }
 
+        [XmlArray("links")]
+        [XmlArrayItem("link", typeof(Link))]
         public List<Link> Links
         {
             get { return _links; }
             set { _links = value; }
         }
 
+        [XmlElement("email")]
         public String Email
         {
             get { return _email; }
             set { _email = value; }
         }
 
+        [XmlElement("birthday")]
         public String Birthday
         {
             get { return _birthday; }
             set { _birthday = value; }
         }
 
+        [XmlElement("last-name")]
         public String Last_Name
         {
             get { return _last_name; }
             set { _last_name = value; }
         }
 
+        [XmlElement("friends-count")]
         public int Friends_Count
         {
             get { return _friends_count; }
             set { _friends_count = value; }
         }
 
+        [XmlElement("id")]
         public int Id
         {
             get { return _id; }
             set { _id = value; }
         }
 
+        [XmlElement("mobile")]
         public String Mobile
         {
             get { return _mobile; }
             set { _mobile = value; }
         }
 
+        [XmlArray("thumbnails")]
+        [XmlArrayItem("thumbnail", typeof(Thumbnail))]
         public List<Thumbnail> Thumbnails
         {
             get { return _thumbnails; }
             set { _thumbnails = value; }
         }
 
+        [XmlArray("social-networks")]
+        [XmlArrayItem("social-network", typeof(Social_Network))]
         public List<Social_Network> Social_Networks
         {
             get { return _social_networks; }
             set { _social_networks = value; }
         }
 
+        [XmlElement("localization")]
         public String Localization
         {
             get { return _localization; }
             set { _localization = value; }
         }
 
+        [XmlElement("birthday-localization")]
         public String Birth_Localization
         {
             get { return _birth_localization; }
             set { _birth_localization = value; }
         }
 
+        [XmlElement("updated-at")]
         public String Updated_At
         {
             get { return _updated_at; }
             set { _updated_at = value; }
         }
 
+        [XmlArray("enrollments")]
+        [XmlArrayItem("enrollment", typeof(Enrollment))]
         public List<Enrollment> Enrollments
         {
             get { return _enrollments; }
