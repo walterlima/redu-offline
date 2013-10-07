@@ -38,21 +38,23 @@
             this.panel2 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.panel3 = new System.Windows.Forms.Panel();
+            this.lbl_nome_user = new System.Windows.Forms.Label();
             this.bw_load = new System.ComponentModel.BackgroundWorker();
             this.pn_post_status = new System.Windows.Forms.Panel();
             this.btn_post_status = new System.Windows.Forms.Button();
             this.txt_post_status = new System.Windows.Forms.TextBox();
             this.pn_load = new System.Windows.Forms.Panel();
             this.pn_wall = new System.Windows.Forms.Panel();
+            this.pn_avas = new System.Windows.Forms.FlowLayoutPanel();
             this.pn_main_wall = new System.Windows.Forms.FlowLayoutPanel();
             this.bw_post_user = new System.ComponentModel.BackgroundWorker();
             this.btn_update = new System.Windows.Forms.Button();
-            this.lbl_nome_user = new System.Windows.Forms.Label();
-            this.pn_menu_mural = new System.Windows.Forms.Panel();
-            this.pn_menu_avas = new System.Windows.Forms.Panel();
+            this.pn_disciplina = new System.Windows.Forms.FlowLayoutPanel();
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.pic_user = new System.Windows.Forms.PictureBox();
+            this.pn_menu_avas = new System.Windows.Forms.Panel();
+            this.pn_menu_mural = new System.Windows.Forms.Panel();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel3.SuspendLayout();
@@ -154,6 +156,19 @@
             this.panel3.Size = new System.Drawing.Size(176, 191);
             this.panel3.TabIndex = 7;
             // 
+            // lbl_nome_user
+            // 
+            this.lbl_nome_user.AutoSize = true;
+            this.lbl_nome_user.Font = new System.Drawing.Font("Cambria", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_nome_user.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.lbl_nome_user.Location = new System.Drawing.Point(100, 166);
+            this.lbl_nome_user.Name = "lbl_nome_user";
+            this.lbl_nome_user.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.lbl_nome_user.Size = new System.Drawing.Size(67, 15);
+            this.lbl_nome_user.TabIndex = 1;
+            this.lbl_nome_user.Text = "nome_user";
+            this.lbl_nome_user.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
             // bw_load
             // 
             this.bw_load.WorkerReportsProgress = true;
@@ -202,20 +217,35 @@
             this.pn_load.Controls.Add(this.panel1);
             this.pn_load.Controls.Add(this.panel2);
             this.pn_load.Controls.Add(this.pictureBox3);
-            this.pn_load.Location = new System.Drawing.Point(1, -1);
+            this.pn_load.Location = new System.Drawing.Point(0, -1);
             this.pn_load.Name = "pn_load";
-            this.pn_load.Size = new System.Drawing.Size(1007, 690);
+            this.pn_load.Size = new System.Drawing.Size(1008, 690);
             this.pn_load.TabIndex = 10;
             // 
             // pn_wall
             // 
             this.pn_wall.AutoScroll = true;
+            this.pn_wall.Controls.Add(this.pn_disciplina);
+            this.pn_wall.Controls.Add(this.pn_avas);
             this.pn_wall.Controls.Add(this.pn_main_wall);
             this.pn_wall.Location = new System.Drawing.Point(227, 119);
             this.pn_wall.MinimumSize = new System.Drawing.Size(0, 565);
             this.pn_wall.Name = "pn_wall";
             this.pn_wall.Size = new System.Drawing.Size(781, 565);
             this.pn_wall.TabIndex = 5;
+            // 
+            // pn_avas
+            // 
+            this.pn_avas.AutoSize = true;
+            this.pn_avas.BackColor = System.Drawing.Color.White;
+            this.pn_avas.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pn_avas.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+            this.pn_avas.Location = new System.Drawing.Point(3, 3);
+            this.pn_avas.MinimumSize = new System.Drawing.Size(610, 560);
+            this.pn_avas.Name = "pn_avas";
+            this.pn_avas.Size = new System.Drawing.Size(610, 560);
+            this.pn_avas.TabIndex = 12;
+            this.pn_avas.Visible = false;
             // 
             // pn_main_wall
             // 
@@ -244,38 +274,18 @@
             this.btn_update.UseVisualStyleBackColor = true;
             this.btn_update.Click += new System.EventHandler(this.btn_update_Click);
             // 
-            // lbl_nome_user
+            // pn_disciplina
             // 
-            this.lbl_nome_user.AutoSize = true;
-            this.lbl_nome_user.Font = new System.Drawing.Font("Cambria", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_nome_user.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.lbl_nome_user.Location = new System.Drawing.Point(100, 166);
-            this.lbl_nome_user.Name = "lbl_nome_user";
-            this.lbl_nome_user.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.lbl_nome_user.Size = new System.Drawing.Size(67, 15);
-            this.lbl_nome_user.TabIndex = 1;
-            this.lbl_nome_user.Text = "nome_user";
-            this.lbl_nome_user.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // pn_menu_mural
-            // 
-            this.pn_menu_mural.BackgroundImage = global::ReduOffline.images.visao_geral;
-            this.pn_menu_mural.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.pn_menu_mural.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pn_menu_mural.Location = new System.Drawing.Point(32, 238);
-            this.pn_menu_mural.Name = "pn_menu_mural";
-            this.pn_menu_mural.Size = new System.Drawing.Size(192, 36);
-            this.pn_menu_mural.TabIndex = 12;
-            // 
-            // pn_menu_avas
-            // 
-            this.pn_menu_avas.BackgroundImage = global::ReduOffline.images.ambientes;
-            this.pn_menu_avas.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.pn_menu_avas.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pn_menu_avas.Location = new System.Drawing.Point(32, 290);
-            this.pn_menu_avas.Name = "pn_menu_avas";
-            this.pn_menu_avas.Size = new System.Drawing.Size(192, 38);
-            this.pn_menu_avas.TabIndex = 13;
+            this.pn_disciplina.AutoSize = true;
+            this.pn_disciplina.BackColor = System.Drawing.Color.White;
+            this.pn_disciplina.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pn_disciplina.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+            this.pn_disciplina.Location = new System.Drawing.Point(3, 3);
+            this.pn_disciplina.MinimumSize = new System.Drawing.Size(610, 560);
+            this.pn_disciplina.Name = "pn_disciplina";
+            this.pn_disciplina.Size = new System.Drawing.Size(610, 560);
+            this.pn_disciplina.TabIndex = 13;
+            this.pn_disciplina.Visible = false;
             // 
             // pictureBox3
             // 
@@ -307,6 +317,28 @@
             this.pic_user.Size = new System.Drawing.Size(160, 160);
             this.pic_user.TabIndex = 0;
             this.pic_user.TabStop = false;
+            // 
+            // pn_menu_avas
+            // 
+            this.pn_menu_avas.BackgroundImage = global::ReduOffline.images.ambientes;
+            this.pn_menu_avas.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.pn_menu_avas.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pn_menu_avas.Location = new System.Drawing.Point(32, 290);
+            this.pn_menu_avas.Name = "pn_menu_avas";
+            this.pn_menu_avas.Size = new System.Drawing.Size(192, 38);
+            this.pn_menu_avas.TabIndex = 13;
+            this.pn_menu_avas.Click += new System.EventHandler(this.pn_menu_avas_Click);
+            // 
+            // pn_menu_mural
+            // 
+            this.pn_menu_mural.BackgroundImage = global::ReduOffline.images.visao_geral;
+            this.pn_menu_mural.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.pn_menu_mural.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pn_menu_mural.Location = new System.Drawing.Point(32, 238);
+            this.pn_menu_mural.Name = "pn_menu_mural";
+            this.pn_menu_mural.Size = new System.Drawing.Size(192, 36);
+            this.pn_menu_mural.TabIndex = 12;
+            this.pn_menu_mural.Click += new System.EventHandler(this.pn_menu_mural_Click);
             // 
             // Form1
             // 
@@ -369,6 +401,8 @@
         private System.Windows.Forms.Label lbl_nome_user;
         private System.Windows.Forms.Panel pn_menu_mural;
         private System.Windows.Forms.Panel pn_menu_avas;
+        private System.Windows.Forms.FlowLayoutPanel pn_avas;
+        private System.Windows.Forms.FlowLayoutPanel pn_disciplina;
     }
 }
 

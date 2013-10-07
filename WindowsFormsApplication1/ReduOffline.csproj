@@ -54,6 +54,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AnswerViewer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="AnswerViewer.Designer.cs">
+      <DependentUpon>AnswerViewer.cs</DependentUpon>
+    </Compile>
     <Compile Include="API_Functions\CourseFunctions.cs" />
     <Compile Include="API_Functions\EnrollementFunctions.cs" />
     <Compile Include="API_Functions\EnvironmentFunctions.cs" />
@@ -62,11 +68,53 @@
     <Compile Include="API_Functions\SpaceFunctions.cs" />
     <Compile Include="API_Functions\SubjectFunctions.cs" />
     <Compile Include="API_Functions\UserFunctions.cs" />
+    <Compile Include="AulaViewer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="AulaViewer.Designer.cs">
+      <DependentUpon>AulaViewer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AvasViewer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="AvasViewer.Designer.cs">
+      <DependentUpon>AvasViewer.cs</DependentUpon>
+    </Compile>
     <Compile Include="Constants.cs" />
     <Compile Include="Contants.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Contants.resx</DependentUpon>
+    </Compile>
+    <Compile Include="CursoViewer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="CursoViewer.Designer.cs">
+      <DependentUpon>CursoViewer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DisciplinaViewer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DisciplinaViewer.Designer.cs">
+      <DependentUpon>DisciplinaViewer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ModuloDetailViewer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ModuloDetailViewer.Designer.cs">
+      <DependentUpon>ModuloDetailViewer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ModulosViewer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ModulosViewer.Designer.cs">
+      <DependentUpon>ModulosViewer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="StatusAnswerControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="StatusAnswerControl.Designer.cs">
+      <DependentUpon>StatusAnswerControl.cs</DependentUpon>
     </Compile>
     <Compile Include="StatusControl.cs">
       <SubType>UserControl</SubType>
@@ -121,9 +169,33 @@
     <Compile Include="Tracing.cs" />
     <Compile Include="XMLReader.cs" />
     <Compile Include="XMLWriter.cs" />
+    <EmbeddedResource Include="AnswerViewer.resx">
+      <DependentUpon>AnswerViewer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AulaViewer.resx">
+      <DependentUpon>AulaViewer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AvasViewer.resx">
+      <DependentUpon>AvasViewer.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Contants.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Contants.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CursoViewer.resx">
+      <DependentUpon>CursoViewer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DisciplinaViewer.resx">
+      <DependentUpon>DisciplinaViewer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ModuloDetailViewer.resx">
+      <DependentUpon>ModuloDetailViewer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ModulosViewer.resx">
+      <DependentUpon>ModulosViewer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StatusAnswerControl.resx">
+      <DependentUpon>StatusAnswerControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="StatusUser.resx">
       <DependentUpon>StatusUser.cs</DependentUpon>
@@ -182,6 +254,27 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="bin\Debug\visao_geral.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\redu-simbolo-hidpi.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="disciplina.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="aula.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="livre.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="modulo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="aula_2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="responder.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

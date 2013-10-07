@@ -15,6 +15,7 @@ namespace ReduOffline
     public partial class Form1 : Form
     {
         private Redu _redu = new Redu();
+        private bool _avas_loaded = false;
         private List<StatusControl> _list_controls = new List<StatusControl>();
         public Form1()
         {
@@ -212,6 +213,52 @@ namespace ReduOffline
         private void btn_update_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void pn_menu_avas_Click(object sender, EventArgs e)
+        {
+            //load avas
+            if (!_avas_loaded)
+            {
+                load_panel_avas();                
+            }
+            pn_main_wall.Visible = false;
+            pn_avas.Visible = true;
+            pn_disciplina.Visible = false;
+        }
+
+        private void load_panel_avas()
+        {
+            List<EnvironmentRedu> avas = _redu.Current_User_Avas;
+            foreach (EnvironmentRedu a in avas)
+            {
+                AvasViewer ava_control = new AvasViewer();
+                ava_control.Nome_Ava = a.Name;
+                ava_control.load_ava(a.Courses, load_disciplina);
+                pn_avas.Controls.Add(ava_control);
+            }
+            _avas_loaded = true;
+        }
+
+        private void pn_menu_mural_Click(object sender, EventArgs e)
+        {
+            pn_main_wall.Visible = true;
+            pn_avas.Visible = false;
+            pn_disciplina.Visible = false;
+        }
+
+        private void load_disciplina(object sender, EventArgs e)
+        {
+            pn_disciplina.Controls.Clear();
+            Space disciplina = ((DisciplinaViewer)((LinkLabel) sender).Parent).Disciplina;
+            ModulosViewer disciplina_control = new ModulosViewer();
+            disciplina_control.Nome_Disciplina = disciplina.Name;
+            disciplina_control.Descricao_Disciplina = disciplina.Description;
+            disciplina_control.load_modulos(disciplina.Subjects);
+            pn_disciplina.Controls.Add(disciplina_control);
+            pn_disciplina.Visible = true;
+            pn_main_wall.Visible = false;
+            pn_avas.Visible = false;
         }
     }
 }

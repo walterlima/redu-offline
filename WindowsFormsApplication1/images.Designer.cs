@@ -73,6 +73,46 @@ namespace ReduOffline {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap aula {
+            get {
+                object obj = ResourceManager.GetObject("aula", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap aula_2 {
+            get {
+                object obj = ResourceManager.GetObject("aula_2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap disciplina {
+            get {
+                object obj = ResourceManager.GetObject("disciplina", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap livre {
+            get {
+                object obj = ResourceManager.GetObject("livre", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap loading_blue {
             get {
                 object obj = ResourceManager.GetObject("loading_blue", resourceCulture);
@@ -86,6 +126,36 @@ namespace ReduOffline {
         internal static System.Drawing.Bitmap loading_blue_24 {
             get {
                 object obj = ResourceManager.GetObject("loading_blue_24", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap modulo {
+            get {
+                object obj = ResourceManager.GetObject("modulo", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap redu_simbolo_hidpi {
+            get {
+                object obj = ResourceManager.GetObject("redu_simbolo_hidpi", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap responder {
+            get {
+                object obj = ResourceManager.GetObject("responder", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

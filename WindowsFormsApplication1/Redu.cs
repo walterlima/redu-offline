@@ -13,8 +13,8 @@ namespace ReduOffline
         private ReduClientOffline _redu_offline;
         private ReduClientOnline _redu_online;
         private ReduOAuth _redu_oauth;
-        private User _current_user;        
-        private List<EnvironmentRedu> _current_user_avas;
+        private User _current_user;
+        private List<EnvironmentRedu> _current_user_avas;        
         private List<Status> _feed;
         private List<Enrollment> _current_user_enrollments;
         private bool _is_first_login = true;
@@ -152,6 +152,12 @@ namespace ReduOffline
         {
             get { return _feed; }
             set { _feed = value; }
+        }
+
+        public List<EnvironmentRedu> Current_User_Avas
+        {
+            get { return _current_user_avas; }
+            set { _current_user_avas = value; }
         }
     }
 }
