@@ -81,11 +81,6 @@
       <DependentUpon>AvasViewer.cs</DependentUpon>
     </Compile>
     <Compile Include="Constants.cs" />
-    <Compile Include="Contants.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Contants.resx</DependentUpon>
-    </Compile>
     <Compile Include="CursoViewer.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -177,10 +172,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="AvasViewer.resx">
       <DependentUpon>AvasViewer.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Contants.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Contants.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="CursoViewer.resx">
       <DependentUpon>CursoViewer.cs</DependentUpon>

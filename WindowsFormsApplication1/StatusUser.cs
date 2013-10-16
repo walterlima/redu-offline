@@ -11,10 +11,10 @@ using ReduOffline.Models;
 
 namespace ReduOffline
 {
-    public partial class StatusUser : UserControl//StatusControl
+    public partial class StatusUser : StatusControl
     {
 
-        private Action<object, EventArgs> method_to_send_answer;        
+        private Action<object, EventArgs> method_to_send_answer;
 
         public StatusUser()
         {

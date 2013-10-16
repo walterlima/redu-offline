@@ -30,18 +30,18 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(StatusUser));
             this.main_panel = new System.Windows.Forms.Panel();
-            this.lbl_txt = new System.Windows.Forms.Label();
             this.lbl_status_action = new System.Windows.Forms.Label();
-            this.pn_to_add_answer = new System.Windows.Forms.FlowLayoutPanel();
-            this.panel1 = new System.Windows.Forms.Panel();
             this.pic_user = new System.Windows.Forms.PictureBox();
+            this.pn_to_add_answer = new System.Windows.Forms.FlowLayoutPanel();
+            this.lbl_txt = new System.Windows.Forms.Label();
+            this.pn_answer_container = new System.Windows.Forms.FlowLayoutPanel();
+            this.panel1 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
             this.lnk_responder = new System.Windows.Forms.LinkLabel();
-            this.pn_answer_container = new System.Windows.Forms.FlowLayoutPanel();
             this.main_panel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pic_user)).BeginInit();
             this.pn_to_add_answer.SuspendLayout();
             this.panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pic_user)).BeginInit();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -56,19 +56,8 @@
             this.main_panel.Location = new System.Drawing.Point(1, 0);
             this.main_panel.MinimumSize = new System.Drawing.Size(595, 2);
             this.main_panel.Name = "main_panel";
-            this.main_panel.Size = new System.Drawing.Size(595, 156);
+            this.main_panel.Size = new System.Drawing.Size(595, 146);
             this.main_panel.TabIndex = 9;
-            // 
-            // lbl_txt
-            // 
-            this.lbl_txt.AutoSize = true;
-            this.lbl_txt.Font = new System.Drawing.Font("Cambria", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_txt.Location = new System.Drawing.Point(3, 0);
-            this.lbl_txt.MaximumSize = new System.Drawing.Size(585, 0);
-            this.lbl_txt.Name = "lbl_txt";
-            this.lbl_txt.Size = new System.Drawing.Size(584, 70);
-            this.lbl_txt.TabIndex = 4;
-            this.lbl_txt.Text = resources.GetString("lbl_txt.Text");
             // 
             // lbl_status_action
             // 
@@ -79,6 +68,14 @@
             this.lbl_status_action.Size = new System.Drawing.Size(109, 14);
             this.lbl_status_action.TabIndex = 2;
             this.lbl_status_action.Text = "Fulano fez algo em :";
+            // 
+            // pic_user
+            // 
+            this.pic_user.Location = new System.Drawing.Point(6, 6);
+            this.pic_user.Name = "pic_user";
+            this.pic_user.Size = new System.Drawing.Size(32, 32);
+            this.pic_user.TabIndex = 1;
+            this.pic_user.TabStop = false;
             // 
             // pn_to_add_answer
             // 
@@ -91,31 +88,45 @@
             this.pn_to_add_answer.MaximumSize = new System.Drawing.Size(590, 0);
             this.pn_to_add_answer.MinimumSize = new System.Drawing.Size(590, 0);
             this.pn_to_add_answer.Name = "pn_to_add_answer";
-            this.pn_to_add_answer.Size = new System.Drawing.Size(590, 107);
+            this.pn_to_add_answer.Size = new System.Drawing.Size(590, 97);
             this.pn_to_add_answer.TabIndex = 5;
+            // 
+            // lbl_txt
+            // 
+            this.lbl_txt.AutoSize = true;
+            this.lbl_txt.Font = new System.Drawing.Font("Cambria", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_txt.Location = new System.Drawing.Point(3, 0);
+            this.lbl_txt.MaximumSize = new System.Drawing.Size(585, 0);
+            this.lbl_txt.Name = "lbl_txt";
+            this.lbl_txt.Size = new System.Drawing.Size(584, 70);
+            this.lbl_txt.TabIndex = 4;
+            this.lbl_txt.Text = resources.GetString("lbl_txt.Text");
+            // 
+            // pn_answer_container
+            // 
+            this.pn_answer_container.AutoSize = true;
+            this.pn_answer_container.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+            this.pn_answer_container.Location = new System.Drawing.Point(3, 73);
+            this.pn_answer_container.MaximumSize = new System.Drawing.Size(585, 0);
+            this.pn_answer_container.MinimumSize = new System.Drawing.Size(585, 0);
+            this.pn_answer_container.Name = "pn_answer_container";
+            this.pn_answer_container.Size = new System.Drawing.Size(585, 0);
+            this.pn_answer_container.TabIndex = 6;
             // 
             // panel1
             // 
             this.panel1.Controls.Add(this.panel2);
             this.panel1.Location = new System.Drawing.Point(3, 79);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(584, 25);
+            this.panel1.Size = new System.Drawing.Size(584, 15);
             this.panel1.TabIndex = 5;
-            // 
-            // pic_user
-            // 
-            this.pic_user.Location = new System.Drawing.Point(6, 6);
-            this.pic_user.Name = "pic_user";
-            this.pic_user.Size = new System.Drawing.Size(32, 32);
-            this.pic_user.TabIndex = 1;
-            this.pic_user.TabStop = false;
             // 
             // panel2
             // 
             this.panel2.BackgroundImage = global::ReduOffline.images.responder;
             this.panel2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.panel2.Controls.Add(this.lnk_responder);
-            this.panel2.Location = new System.Drawing.Point(510, 5);
+            this.panel2.Location = new System.Drawing.Point(510, -1);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(71, 17);
             this.panel2.TabIndex = 0;
@@ -134,15 +145,6 @@
             this.lnk_responder.VisitedLinkColor = System.Drawing.Color.CornflowerBlue;
             this.lnk_responder.Click += new System.EventHandler(this.lnk_responder_Click);
             // 
-            // pn_answer_container
-            // 
-            this.pn_answer_container.Location = new System.Drawing.Point(3, 73);
-            this.pn_answer_container.MaximumSize = new System.Drawing.Size(585, 0);
-            this.pn_answer_container.MinimumSize = new System.Drawing.Size(585, 0);
-            this.pn_answer_container.Name = "pn_answer_container";
-            this.pn_answer_container.Size = new System.Drawing.Size(585, 0);
-            this.pn_answer_container.TabIndex = 6;
-            // 
             // StatusUser
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -151,13 +153,13 @@
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.Controls.Add(this.main_panel);
             this.Name = "StatusUser";
-            this.Size = new System.Drawing.Size(599, 159);
+            this.Size = new System.Drawing.Size(599, 149);
             this.main_panel.ResumeLayout(false);
             this.main_panel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pic_user)).EndInit();
             this.pn_to_add_answer.ResumeLayout(false);
             this.pn_to_add_answer.PerformLayout();
             this.panel1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pic_user)).EndInit();
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
             this.ResumeLayout(false);

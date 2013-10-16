@@ -22,8 +22,18 @@ namespace ReduOffline.Models
         private String _text;
         private String _date;
         private String _lecture_id;
-        private String _status_id;        
+        private String _status_id;
+        private String _sync_time_stamp;        
+        private bool _done;        
         private TypePendingActivity _type_pending_activity;
+        private Status _wrapped_status;
+
+        [XmlElement("wrapped-status")]
+        public Status Wrapped_Status
+        {
+            get { return _wrapped_status; }
+            set { _wrapped_status = value; }
+        }
 
         [XmlElement("id-user")]
         public String Id_User
@@ -65,6 +75,20 @@ namespace ReduOffline.Models
         {
             get { return _type_pending_activity; }
             set { _type_pending_activity = value; }
+        }
+
+        [XmlElement("sync-time-stamp")]
+        public String Sync_Time_Stamp
+        {
+            get { return _sync_time_stamp; }
+            set { _sync_time_stamp = value; }
+        }
+
+        [XmlElement("done")]
+        public bool Done
+        {
+            get { return _done; }
+            set { _done = value; }
         }
         
     }

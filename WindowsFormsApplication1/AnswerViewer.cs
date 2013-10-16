@@ -17,19 +17,19 @@ namespace ReduOffline
             InitializeComponent();
         }
 
-        public override String Image_URL
+        public String Image_URL
         {
             get { return pic_user.ImageLocation; }
             set { pic_user.ImageLocation = value; }
         }
 
-        public override String Text_Resposta
+        public String Text_Resposta
         {
             get { return lbl_resposta.Text; }
             set { lbl_resposta.Text = value; }
         }
 
-        public override String Name_User
+        public String Name_User
         {
             get { return lbl_nome_user.Text; }
             set { lbl_nome_user.Text = value; }

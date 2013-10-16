@@ -147,6 +147,44 @@ namespace ReduOffline
 
             doc_old_statuses.Save(path);
         }
+        
+        /// <summary>
+        /// Writes pending activities to the xml file
+        /// </summary>
+        /// <param name="pending_activities"></param>
+        public void save_pending_activity(List<PendingActivity> pending_activities)
+        {
+            string path = Constants.XML_PENDING_ACTIVITY_PATH;
+
+            if (File.Exists(path))
+            {
+                serializer = new System.Xml.Serialization.XmlSerializer(typeof(List<PendingActivity>));
+                XmlDocument doc_new_pa = new XmlDocument();
+                XmlDocument doc_old_pa = new XmlDocument();
+                string xmldata = "";
+
+                using (StringWriter writer = new Utf8StringWriter())
+                {
+                    serializer.Serialize(writer, pending_activities);
+                    xmldata = writer.ToString();
+                }
+
+                doc_old_pa.Load(path);
+                doc_new_pa.LoadXml(xmldata);
+
+                foreach (XmlNode node in doc_new_pa.DocumentElement.ChildNodes)
+                {
+                    var newNode = doc_old_pa.ImportNode(node, true);
+                    doc_old_pa.DocumentElement.AppendChild(newNode);
+                }
+
+                doc_old_pa.Save(path);
+            }
+            else
+            {
+                serialize_and_save_xml<List<PendingActivity>>(pending_activities, path);
+            }
+        }
 
         public class Utf8StringWriter : StringWriter
         {

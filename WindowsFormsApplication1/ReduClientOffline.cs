@@ -10,11 +10,18 @@ namespace ReduOffline
 {
     public class ReduClientOffline : UserFunctions
     {
-        private XMLReader _xml_reader = new XMLReader();
+        private XMLReader _xml_reader;
+        private XMLWriter _xml_writer;
         private string _current_user_login;
         private List<EnvironmentRedu> _current_user_avas = new List<EnvironmentRedu>();
         private List<Space> _current_user_spaces = new List<Space>();
-        private List<Lecture> _current_user_lectures = new List<Lecture>();        
+        private List<Lecture> _current_user_lectures = new List<Lecture>();
+
+        public ReduClientOffline(XMLWriter xml_writer, XMLReader xml_reader)
+        {
+            this._xml_writer = xml_writer;
+            this._xml_reader = xml_reader;
+        }
 
         public User get_user(string user_id)
         {
@@ -55,48 +62,75 @@ namespace ReduOffline
         public List<Status> reply_status(List<Status> feed, User user, Status status_to_reply, string text)
         {
             Status answer = new Status();
+            answer.Id = get_next_status_id().ToString();
             answer.Type = Constants.STATUS_ANSWER;
             answer.Text = text;
             answer.User = user;
-            add_temp_status(answer);
+            answer.Created_At = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss") + "-03:00";
+            answer.Links = new List<Link>();
+            add_temp_status(answer, PendingActivity.TypePendingActivity.AnswerStatus);
             return feed;
         }
 
         public List<Status> post_status_user(List<Status> feed, User user, string text)
         {
             Status status = new Status();
-            status.Id = "-1";
+            status.Id = get_next_status_id().ToString();
             status.User = user;
             status.Type = Constants.STATUS_ACTIVITY;
             status.Text = text;
-            List<Link> links = new List<Link>();
+            status.Created_At = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss")+"-03:00";
+            status.Links = new List<Link>();            
             Link statusable = new Link(Constants.REL_STATUSABLE, "users");
-            add_temp_status(status);
+            status.Links.Add(statusable);
+            add_temp_status(status, PendingActivity.TypePendingActivity.SubmitStatusUser);
+            feed.Insert(0, status);
             return feed;
         }
 
         public List<Status> post_status_space(List<Status> feed, Space space, User user, string text)
         {
             Status status = new Status();
+            status.Id = get_next_status_id().ToString();
             status.User = user;
             status.Type = Constants.STATUS_ACTIVITY;
             status.Text = text;
-            add_temp_status(status);
+            status.Created_At = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss") + "-03:00";
+            status.Links = new List<Link>();
+            Link statusable = new Link(Constants.REL_STATUSABLE, "spaces");            
+            status.Links.Add(statusable);
+            add_temp_status(status, PendingActivity.TypePendingActivity.SubmitStatusSpace);
+            feed.Insert(0, status);
             return feed;
         }
 
         public List<Status> post_status_lecture(List<Status> feed, User user, Lecture lecture_id, string text, bool is_help)
         {
             Status status = new Status();
+            status.Id = get_next_status_id().ToString();
             status.User = user;
             status.Type = is_help ? Constants.STATUS_HELP : Constants.STATUS_ACTIVITY;
             status.Text = text;
-            add_temp_status(status);
+            status.Created_At = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss") + "-03:00";
+            status.Links = new List<Link>();
+            Link statusable = new Link(Constants.REL_STATUSABLE, "lectures");
+            status.Links.Add(statusable);            
+            add_temp_status(status, PendingActivity.TypePendingActivity.SubmitStatusLecture);
+            feed.Insert(0, status);
             return feed;
         }
 
-        public void add_temp_status(Status temp_status)
+        public void add_temp_status(Status temp_status, PendingActivity.TypePendingActivity type)
         {
+            //create pending activity
+            PendingActivity pa = new PendingActivity();
+            pa.Date = temp_status.Created_At;
+            pa.Id_User = temp_status.User.Id.ToString();
+            pa.Status_Id = temp_status.Id.ToString();
+            pa.Wrapped_Status = temp_status;
+            pa.Type_pending_activity = type;
+            _xml_writer.write_new_statuses(new List<Status> { temp_status }, string.Format(Constants.XML_USER_TIMELINE_PATH, _current_user_login));//save status with a negative ID to be able to erase it after
+            _xml_writer.save_pending_activity(new List<PendingActivity> { pa });//save pending activity for later synchronization
         }
 
         public List<Status> get_user_feed(string login)
@@ -123,6 +157,14 @@ namespace ReduOffline
         public List<User> getUsersBySpace(string space_id, string role)
         {
             throw new NotImplementedException();
+        }
+
+        private int get_next_status_id()
+        {
+            int temp = ReduOffline.Properties.Settings.Default.PENDING_STATUS_ID;
+            temp--;
+            ReduOffline.Properties.Settings.Default.PENDING_STATUS_ID = temp;
+            return temp;
         }
 
         public void set_current_user_login(string login)

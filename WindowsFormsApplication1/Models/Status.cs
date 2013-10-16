@@ -113,7 +113,7 @@ namespace ReduOffline.Models
             get
             {
                 string statusable = Links.Find(p => p.Rel.Equals(Constants.REL_STATUSABLE)).Href;
-                string justNumbers = new String(statusable.Where(Char.IsDigit).ToArray());
+                string justNumbers = this.format_string_to_id(statusable);
                 return justNumbers;
             }
         }
@@ -138,6 +138,27 @@ namespace ReduOffline.Models
         {
             get { return _link_source; }
             set { _link_source = value; }
+        }
+
+        private string format_string_to_id(string url)
+        {
+            url = this.reverse_string(url);
+            int index = url.IndexOf('/');
+            url = url.Remove(index);
+            url = this.reverse_string(url);
+            index = url.IndexOf('-');
+            if (index >= 0)
+            {
+                url = url.Remove(index);
+            }
+            return url;
+        }
+
+        private string reverse_string(string s)
+        {
+            char[] charArray = s.ToCharArray();
+            Array.Reverse(charArray);
+            return new string(charArray);
         }
     }
 }

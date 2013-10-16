@@ -20,6 +20,7 @@ namespace ReduOffline
         public static String XML_AVAS_FOLDER = XML_CONFIG_FOLDER + "\\avas";
         public static String XML_USER_THUMBNAIL_FOLDER = XML_USER_FOLDER + "\\{0}-thumbnails";
         public static String XML_AVA_THUMBNAIL_FOLDER = XML_AVAS_FOLDER + "\\{0}-thumbnails";
+        public static String XML_PENDING_ACTIVITY_PATH = XML_CONFIG_FOLDER + "\\pending_activities.xml";
         
         public const String AUTHORIZE_URL = "http://www.redu.com.br/oauth/authorize?client_id={0}";
         public const String ACCESS_TOKEN_URL = "http://www.redu.com.br/oauth/token?code={0}&client_id={1}&client_secret={2}&grant_type={3}";
@@ -90,5 +91,6 @@ namespace ReduOffline
         public const String LINK_STATUSABLE = "statusable";
         public const String LINK_IN_RESPONSE_TO = "in_response_to";
         public const String LINK_SELF = "self";
+        
     }
 }

@@ -16,7 +16,8 @@ namespace ReduOffline
         
         private HttpRequests _http = new HttpRequests();
         private ReduOAuth _reduOAuth;
-        private XMLWriter _xml_writer = new XMLWriter();
+        private XMLWriter _xml_writer;
+        private XMLReader _xml_reader;
 
         private User _current_user;
         private List<EnvironmentRedu> _current_user_avas;
@@ -24,10 +25,11 @@ namespace ReduOffline
         private List<Enrollment> _current_user_enrollments;
 
         private System.ComponentModel.BackgroundWorker bw_download_thumb_user;
-               
 
-        public ReduClientOnline(ReduOAuth reduOAuth)
+        public ReduClientOnline(ReduOAuth reduOAuth, XMLWriter xml_writer, XMLReader xml_reader)
         {
+            this._xml_writer = xml_writer;
+            this._xml_reader = xml_reader;
             _reduOAuth = reduOAuth;
             this.bw_download_thumb_user = new System.ComponentModel.BackgroundWorker();
             this.bw_download_thumb_user.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bw_download_thumb_user_DoWork);
@@ -71,10 +73,13 @@ namespace ReduOffline
             List<EnvironmentRedu> avas = new List<EnvironmentRedu>();
             foreach(Enrollment enroll in enrollments)
             {
-                EnvironmentRedu ava = _http.get<EnvironmentRedu>
-                    (trim_base_url(enroll.Links.First(p => p.Rel.Equals(Constants.REL_ENVIRONMENT)).Href), _reduOAuth.get_access_token());
-                avas.Add(ava);
-                enroll.Ava_Name = ava.Initials;
+                if (!enroll.State.Equals("waiting"))
+                {
+                    EnvironmentRedu ava = _http.get<EnvironmentRedu>
+                        (trim_base_url(enroll.Links.First(p => p.Rel.Equals(Constants.REL_ENVIRONMENT)).Href), _reduOAuth.get_access_token());
+                    avas.Add(ava);
+                    enroll.Ava_Name = ava.Initials;
+                }
             }
             return avas;
 
@@ -103,6 +108,10 @@ namespace ReduOffline
                         {
                             space.Subjects = _http.get<List<Subject>>(trim_base_url(space.Links.First(p => p.Rel.Equals(Constants.REL_SUBJECT)).Href), _reduOAuth.get_access_token());
                             space.Timeline = _http.get<List<Status>>(trim_base_url(space.Links.First(p => p.Rel.Equals(Constants.REL_TIMELINE)).Href), _reduOAuth.get_access_token());
+                            if (space.Timeline != null)
+                            {
+                                space.Timeline = this.get_statuses_answers(space.Timeline);
+                            }
                             space.Name_Course = course.Name;
                             space.Name_Ava = ava.Name;
                             foreach (Subject subject in space.Subjects)
@@ -112,6 +121,10 @@ namespace ReduOffline
                                 {
                                     string url_status = "lectures/{0}/statuses";
                                     lecture.Timeline = _http.get<List<Status>>(String.Format(url_status, lecture.Id), _reduOAuth.get_access_token());
+                                    if (lecture.Timeline != null)
+                                    {
+                                        lecture.Timeline = this.get_statuses_answers(lecture.Timeline);
+                                    }
                                     lecture.Name_Ava = ava.Name;
                                     lecture.Name_Course = course.Name;
                                     lecture.Name_Space = space.Name;
@@ -207,13 +220,7 @@ namespace ReduOffline
         {
             //não é muito interessante o feed LOG
             List<Status> feed = _http.get<List<Status>>(url, _reduOAuth.get_access_token());
-            foreach (Status status in feed)
-            {
-                if (status.Answers_Count > 0)
-                {
-                    status.Answers = _http.get<List<Status>>(status.Links.Find(p => p.Rel.Equals(Constants.LINK_ANSWERS)).Href, _reduOAuth.get_access_token());
-                }
-            }
+            feed = this.get_statuses_answers(feed);
             return feed;
         }
 
@@ -246,6 +253,19 @@ namespace ReduOffline
             }
             while (!has_found);
             return feed_total;
+        }
+
+        public List<Status> get_statuses_answers(List<Status> statuses)
+        {
+            foreach (Status status in statuses)
+            {
+                if (status.Answers_Count > 0)
+                {
+                    status.Answers = _http.get<List<Status>>(trim_base_url(status.Links.Find(p => p.Rel.Equals(Constants.LINK_ANSWERS)).Href), _reduOAuth.get_access_token());                    
+                }
+            }
+
+            return statuses;
         }
 
         /// <summary>
@@ -366,7 +386,17 @@ namespace ReduOffline
             feed.Insert(0, status);
             return feed;
         }
-        
+
+        public void synchronize_pending_activities()
+        {
+            //read pending activities for current user -- for the first moment we will just upload the activities for a logged in user
+
+            //realize each task described by each activity saving the informations within their respective xml files
+
+            //erase the statuses with minus IDs
+
+            //set pending activity as synchronized (timestamp + bool)
+        }
 
         public void get_user_first_data()
         {
@@ -375,13 +405,14 @@ namespace ReduOffline
             Current_User = user;
 
             String enrollement_url = this.trim_base_url(user.Links.First(p => p.Rel.Equals(Constants.REL_ENROLLMENTS)).Href);
-            List<Enrollment> enrollments = this.get_enrollment_by_user(enrollement_url);
-            user.Enrollments = enrollments;
+            List<Enrollment> enrollments = this.get_enrollment_by_user(enrollement_url);            
+            user.Enrollments = (from enroll in enrollments where !enroll.State.Equals("waiting") select enroll).ToList();
+            
 
-            Current_User_Enrollments = enrollments;
+            Current_User_Enrollments = user.Enrollments;
 
             List<Link> courses_enrolled = new List<Link>();
-            foreach (Enrollment enroll in enrollments)
+            foreach (Enrollment enroll in user.Enrollments)
             {
                 courses_enrolled.Add(enroll.Links.Find(p => p.Rel.Equals(Constants.REL_COURSE)));
             }

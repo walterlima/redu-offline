@@ -14,9 +14,20 @@ namespace ReduOffline
 {
     public partial class Form1 : Form
     {
+        public enum UserView
+        {
+            User=1,
+            Ava=2,
+            Course=3,
+            Space=4,
+            Subject=5,
+            Lecture=6
+        }
+        
         private Redu _redu = new Redu();
         private bool _avas_loaded = false;
         private List<StatusControl> _list_controls = new List<StatusControl>();
+
         public Form1()
         {
             InitializeComponent();            
@@ -146,9 +157,13 @@ namespace ReduOffline
                     status_control_user.Name = "status" + status.Id;
                     status_control_user.Name_User = status.User.First_Name;
                     status_control_user.Image_URL = Constants.URL_DEFAULT_THUMBNAIL_USER_32;
+                    if (status.Answers_Count > 0)
+                    {
+                        status_control_user.load_respostas(status.Answers);
+                    }                    
                     pn_main_wall.Controls.Add(status_control_user);
-                    y = _list_controls.Count > 0 ? _list_controls[_list_controls.Count - 1].Location.Y + _list_controls[_list_controls.Count - 1].Size.Height + 10 : 5;
-                    status_control_user.Location = new Point(x, y);
+                    //y = _list_controls.Count > 0 ? _list_controls[_list_controls.Count - 1].Location.Y + _list_controls[_list_controls.Count - 1].Size.Height + 10 : 5;
+                    //status_control_user.Location = new Point(x, y);
                     _list_controls.Add(status_control_user);
                     break;
                 case Constants.STATUS_LECTURE:
@@ -159,9 +174,13 @@ namespace ReduOffline
                     status_control_lecture.Name_User = status.User.First_Name;
                     status_control_lecture.Image_URL = Constants.URL_DEFAULT_THUMBNAIL_USER_32;
                     status_control_lecture.Link_Tree = status.Link_Tree;
+                    if (status.Answers_Count > 0)
+                    {
+                        status_control_lecture.load_respostas(status.Answers);
+                    }
                     pn_main_wall.Controls.Add(status_control_lecture);
-                    y = _list_controls.Count > 0 ? _list_controls[_list_controls.Count - 1].Location.Y + _list_controls[_list_controls.Count - 1].Size.Height + 10 : 5;
-                    status_control_lecture.Location = new Point(x, y);
+                    //y = _list_controls.Count > 0 ? _list_controls[_list_controls.Count - 1].Location.Y + _list_controls[_list_controls.Count - 1].Size.Height + 10 : 5;
+                    //status_control_lecture.Location = new Point(x, y);
                     _list_controls.Add(status_control_lecture);
                     break;
                 case Constants.STATUS_SPACE:
@@ -172,9 +191,13 @@ namespace ReduOffline
                     status_control_space.Name_User = status.User.First_Name;
                     status_control_space.Image_URL = Constants.URL_DEFAULT_THUMBNAIL_USER_32;
                     status_control_space.Link_Tree = status.Link_Tree;
+                    if (status.Answers_Count > 0)
+                    {
+                        status_control_space.load_respostas(status.Answers);
+                    }
                     pn_main_wall.Controls.Add(status_control_space);
-                    y = _list_controls.Count > 0 ? _list_controls[_list_controls.Count - 1].Location.Y + _list_controls[_list_controls.Count - 1].Size.Height + 10 : 5;
-                    status_control_space.Location = new Point(x, y);
+                    //y = _list_controls.Count > 0 ? _list_controls[_list_controls.Count - 1].Location.Y + _list_controls[_list_controls.Count - 1].Size.Height + 10 : 5;
+                    //status_control_space.Location = new Point(x, y);
                     _list_controls.Add(status_control_space);
                     break;
 

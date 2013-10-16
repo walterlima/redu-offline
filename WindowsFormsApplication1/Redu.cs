@@ -23,9 +23,11 @@ namespace ReduOffline
 
         public Redu()
         {
+            XMLReader xml_reader = new XMLReader();
+            XMLWriter xml_writer = new XMLWriter();
             _redu_oauth = new ReduOAuth();
-            _redu_offline = new ReduClientOffline();
-            _redu_online = new ReduClientOnline(_redu_oauth);
+            _redu_offline = new ReduClientOffline(xml_writer, xml_reader);
+            _redu_online = new ReduClientOnline(_redu_oauth, xml_writer, xml_reader);
         }
 
         /// <summary>
@@ -139,7 +141,7 @@ namespace ReduOffline
         private bool is_connected()
         {
             int desc;
-            return InternetGetConnectedState(out desc, 0);
+            return false;//InternetGetConnectedState(out desc, 0);
         }
 
         public User Current_user
