@@ -1,9 +1,27 @@
-﻿using System;
+﻿/*
+    Copyright 2013 Walter Ferreira de Lima Filho
+    
+    This file is part of ReduOffline.
+
+    ReduOffline is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    ReduOffline is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with ReduOffline.  If not, see <http://www.gnu.org/licenses/>. 
+
+*/
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ReduOffline.API_Functions;
 using ReduOffline.Models;
 using RestSharp;
 using System.IO;
@@ -11,7 +29,7 @@ using System.ComponentModel;
 
 namespace ReduOffline
 {
-    public class ReduClientOnline : UserFunctions
+    public class ReduClientOnline
     {
         
         private HttpRequests _http = new HttpRequests();
@@ -102,8 +120,9 @@ namespace ReduOffline
                     ava.Courses = validate_enrolled_courses(ava.Courses, enrolled_courses);
                     
                     foreach (Course course in ava.Courses)
-                    {                        
-                        course.Spaces = _http.get<List<Space>>(trim_base_url(course.Links.First(p => p.Rel.Equals(Constants.REL_SPACE)).Href), _reduOAuth.get_access_token());
+                    {
+                        string space_url = trim_base_url(course.Links.First(p => p.Rel.Equals(Constants.REL_SPACE)).Href);
+                        course.Spaces = _http.get<List<Space>>(space_url, _reduOAuth.get_access_token());
                         foreach (Space space in course.Spaces)
                         {
                             space.Subjects = _http.get<List<Subject>>(trim_base_url(space.Links.First(p => p.Rel.Equals(Constants.REL_SUBJECT)).Href), _reduOAuth.get_access_token());
@@ -151,7 +170,10 @@ namespace ReduOffline
             for (int i = 0; i < enrolled_courses.Count; i++)
             {
                 Course course = ava_courses.Find(p => p.Links.Find(q => q.Rel.Equals(Constants.REL_SELF)).Href.Equals(enrolled_courses[i].Href));
-                new_list.Add(course);
+                if (course != null)
+                {
+                    new_list.Add(course);
+                }                
             }
             return new_list;
         }
@@ -311,16 +333,21 @@ namespace ReduOffline
         /// <param name="status_id">Status to reply</param>
         /// <param name="text">Text</param>
         /// <returns>Updated user feed</returns>
-        public List<Status> reply_status(List<Status> feed, string status_id, string text)
+        public List<Status> reply_status(List<Status> feed, Status status_to_reply, string text)
         {
-            string url = string.Format(Constants.POST_STATUS_ANSWER_URL, status_id);
+            string url = string.Format(Constants.POST_STATUS_ANSWER_URL, status_to_reply.Id);
             Dictionary<string, object> paramz = new Dictionary<string, object>();
             String json_model = "[ \"status_id\" : \"{0}\" , \"status\" : [ \"text\" : \"{1}\" ] ]";
-            String json = string.Format(json_model, status_id, text);
+            String json = string.Format(json_model, status_to_reply.Id, text);
             json = json.Replace('[', '{');
             json = json.Replace(']', '}');
             Status status = _http.post<Status>(url, _reduOAuth.get_access_token(), null, json);
-            feed.Insert(0, status);
+            this._xml_writer.save_status_answer(status, status_to_reply);
+            Status to_update = feed.Find(x => x.Id.Equals(status_to_reply.Id));
+            feed.Remove(to_update);
+            to_update.Answers.Add(status);
+            to_update.Answers_Count++;
+            feed.Insert(0, to_update);
             return feed;
         }
 
@@ -361,6 +388,7 @@ namespace ReduOffline
             json = json.Replace('[', '{');
             json = json.Replace(']', '}');
             Status status = _http.post<Status>(url, _reduOAuth.get_access_token(), null, json);
+            this._xml_writer.write_new_statuses(new List<Status> { status }, string.Format(Constants.XML_SPACE_TIMELINE_PATH, space_id));
             feed.Insert(0, status);
             return feed;
         }
@@ -383,52 +411,83 @@ namespace ReduOffline
             json = json.Replace('[', '{');
             json = json.Replace(']', '}');
             Status status = _http.post<Status>(url, _reduOAuth.get_access_token(), null, json);
+            this._xml_writer.write_new_statuses(new List<Status> { status }, string.Format(Constants.XML_LECTURE_TIMELINE_PATH, lecture_id));
             feed.Insert(0, status);
             return feed;
         }
 
-        public void synchronize_pending_activities()
+        public List<Status> synchronize_pending_activities(List<Status> feed)
         {
             //read pending activities for current user -- for the first moment we will just upload the activities for a logged in user
+            List<PendingActivity> pending_activities = _xml_reader.read_pending_activities(_current_user.Id.ToString());
+            if (pending_activities.Count > 0)
+            {
+                //realize each task described by each activity saving the informations within their respective xml files
+                foreach (PendingActivity pa in pending_activities)
+                {
+                    string path = "";
+                    switch (pa.Type_pending_activity)
+                    {
+                        case PendingActivity.TypePendingActivity.SubmitStatusUser:
+                            feed = this.post_status_user(feed, pa.Id_User, "(from ReduOffline) " + pa.Wrapped_Status.Text);
+                            path = string.Format(Constants.XML_USER_TIMELINE_PATH, pa.Wrapped_Status.User.Login);
+                            break;
+                        case PendingActivity.TypePendingActivity.SubmitStatusSpace:
+                            feed = this.post_status_space(feed, pa.Space_Id, "(from ReduOffline) " + pa.Wrapped_Status.Text);
+                            path = string.Format(Constants.XML_SPACE_TIMELINE_PATH, pa.Space_Id);
+                            break;
+                        case PendingActivity.TypePendingActivity.SubmitStatusLecture:
+                            feed = this.post_status_lecture(feed, pa.Lecture_Id, "(from ReduOffline) " + pa.Wrapped_Status.Text, false); //TODO: find a way to tell if it is a help status or not
+                            path = string.Format(Constants.XML_SPACE_TIMELINE_PATH, pa.Lecture_Id);
+                            break;
+                        case PendingActivity.TypePendingActivity.AnswerStatus:
+                            feed = this.reply_status(feed, pa.Status_To_Answer, "(from ReduOffline) " + pa.Wrapped_Status.Text);
+                            break;
+                    }
+                    pa.Sync_Time_Stamp = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss") + "-03:00";
 
-            //realize each task described by each activity saving the informations within their respective xml files
+                    feed.Remove(pa.Wrapped_Status);
+                    //erase the statuses with minus IDs
+                    _xml_writer.erase_pending_statuses(new List<Tuple<Status,string>>{ new Tuple<Status,String>(pa.Wrapped_Status, path)});
+                }
+                //set pending activity as synchronized (timestamp + bool)
+                _xml_writer.set_pending_activity_done(pending_activities, _current_user.Id.ToString());
+            }
 
-            //erase the statuses with minus IDs
-
-            //set pending activity as synchronized (timestamp + bool)
+            return feed;
         }
 
         public void get_user_first_data()
         {
+            //get user's data
             User user = this.get_me();
             get_user_thumbnails(user);
             Current_User = user;
 
+            //get enrollments
             String enrollement_url = this.trim_base_url(user.Links.First(p => p.Rel.Equals(Constants.REL_ENROLLMENTS)).Href);
             List<Enrollment> enrollments = this.get_enrollment_by_user(enrollement_url);            
-            user.Enrollments = (from enroll in enrollments where !enroll.State.Equals("waiting") select enroll).ToList();
-            
-
+            user.Enrollments = (from enroll in enrollments where !enroll.State.Equals("waiting") select enroll).ToList();            
             Current_User_Enrollments = user.Enrollments;
 
+            //validate enrollments
             List<Link> courses_enrolled = new List<Link>();
             foreach (Enrollment enroll in user.Enrollments)
             {
                 courses_enrolled.Add(enroll.Links.Find(p => p.Rel.Equals(Constants.REL_COURSE)));
             }
 
+            //get user's feed
             String feed_url = String.Format(Constants.URL_FEED_USER, user.Id);
             List<Status> feed = this.get_user_feed(feed_url);
-
             Feed = feed;
 
-            List<EnvironmentRedu> avas = this.get_environment_by_user(user.Enrollments);
-            //if(avas.Exists) -> tentar apenas atualizar
-                                    
+            //get ava's data
+            List<EnvironmentRedu> avas = this.get_environment_by_user(user.Enrollments);                                    
             avas = this.fill_up_avas_data(avas, courses_enrolled);
-
             Current_User_Avas = avas;
 
+            //save data in xml
             _xml_writer.save_user_data(user, feed);
             foreach (EnvironmentRedu ava in avas)
             {

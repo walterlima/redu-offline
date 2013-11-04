@@ -1,9 +1,27 @@
-﻿using System;
+﻿/*
+    Copyright 2013 Walter Ferreira de Lima Filho
+    
+    This file is part of ReduOffline.
+
+    ReduOffline is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    ReduOffline is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with ReduOffline.  If not, see <http://www.gnu.org/licenses/>. 
+
+*/
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using OAuth;
 using System.Net;
 using System.IO;
 using System.Xml;
@@ -20,7 +38,6 @@ namespace ReduOffline
         private XmlDocument _xml_user;
 
         private Dictionary<string, string> tokens = new Dictionary<string, string>();
-        private Manager _OAuth = new Manager();
 
         public ReduOAuth()
         {
@@ -44,7 +61,23 @@ namespace ReduOffline
             }
             if (!Directory.Exists(Constants.XML_AVAS_FOLDER))
             {
-                Directory.CreateDirectory(Constants.XML_AVAS_FOLDER);                
+                Directory.CreateDirectory(Constants.XML_AVAS_FOLDER);
+            }
+            if (!Directory.Exists(Constants.XML_COURSES_FOLDER))
+            {
+                Directory.CreateDirectory(Constants.XML_COURSES_FOLDER);
+            }
+            if (!Directory.Exists(Constants.XML_SPACES_FOLDER))
+            {
+                Directory.CreateDirectory(Constants.XML_SPACES_FOLDER);
+            }
+            if (!Directory.Exists(Constants.XML_SUBJECTS_FOLDER))
+            {
+                Directory.CreateDirectory(Constants.XML_SUBJECTS_FOLDER);
+            }
+            if (!Directory.Exists(Constants.XML_LECTURES_FOLDER))
+            {
+                Directory.CreateDirectory(Constants.XML_LECTURES_FOLDER);
             }
             
         }
@@ -65,12 +98,24 @@ namespace ReduOffline
                 _xml_user = new XmlDocument();
                 _xml_user.Load(Constants.XML_USER_CONFIG_FOLDER);
             }
+            if (!File.Exists(Constants.XML_CONFIG_PATH))
+            {
+                XmlDocument xml_app_config = new XmlDocument();
+                XmlNode declaration = xml_app_config.CreateXmlDeclaration("1.0", "UTF-8", null);
+                XmlNode root = xml_app_config.CreateElement("app-config-file");
+                XmlNode pending_activities_id = xml_app_config.CreateElement("peding-activities-id");
+                XmlNode value = xml_app_config.CreateElement("value");
+                value.InnerText = "-1";
+                pending_activities_id.AppendChild(value);
+                root.AppendChild(pending_activities_id);
+                xml_app_config.AppendChild(declaration);
+                xml_app_config.AppendChild(root);
+                xml_app_config.Save(Constants.XML_CONFIG_PATH);
+            }
         }
         
         public void demand_authorize(String login)
         {            
-            _OAuth["consumer_key"] = Constants._consumerKey;
-            _OAuth["consumer_secret"] = Constants._consumerSecret;
             System.Diagnostics.Process.Start(string.Format(Constants.AUTHORIZE_URL, Constants._consumerKey));
         }
 

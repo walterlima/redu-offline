@@ -1,4 +1,23 @@
-﻿using System;
+﻿/*
+    Copyright 2013 Walter Ferreira de Lima Filho
+    
+    This file is part of ReduOffline.
+
+    ReduOffline is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    ReduOffline is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with ReduOffline.  If not, see <http://www.gnu.org/licenses/>. 
+
+*/
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -15,9 +34,14 @@ namespace ReduOffline
         public const String _grant_type = "authorization_code";
 
         public static String XML_CONFIG_FOLDER = Path.GetDirectoryName(Application.ExecutablePath) + "\\config";
-        public static String XML_USER_CONFIG_FOLDER = XML_CONFIG_FOLDER + "\\user_config.xml";
+        public static String XML_CONFIG_PATH = XML_CONFIG_FOLDER + "\\app_config.xml";
+        public static String XML_USER_CONFIG_FOLDER = XML_CONFIG_FOLDER + "\\user_config.xml";        
         public static String XML_USER_FOLDER = XML_CONFIG_FOLDER + "\\users";
         public static String XML_AVAS_FOLDER = XML_CONFIG_FOLDER + "\\avas";
+        public static String XML_COURSES_FOLDER = XML_CONFIG_FOLDER + "\\courses";
+        public static String XML_SPACES_FOLDER = XML_CONFIG_FOLDER + "\\spaces";
+        public static String XML_SUBJECTS_FOLDER = XML_CONFIG_FOLDER + "\\subjects";
+        public static String XML_LECTURES_FOLDER = XML_CONFIG_FOLDER + "\\lectures";
         public static String XML_USER_THUMBNAIL_FOLDER = XML_USER_FOLDER + "\\{0}-thumbnails";
         public static String XML_AVA_THUMBNAIL_FOLDER = XML_AVAS_FOLDER + "\\{0}-thumbnails";
         public static String XML_PENDING_ACTIVITY_PATH = XML_CONFIG_FOLDER + "\\pending_activities.xml";
@@ -25,24 +49,18 @@ namespace ReduOffline
         public const String AUTHORIZE_URL = "http://www.redu.com.br/oauth/authorize?client_id={0}";
         public const String ACCESS_TOKEN_URL = "http://www.redu.com.br/oauth/token?code={0}&client_id={1}&client_secret={2}&grant_type={3}";
 
-        public static String XML_AVA_FOLDER = XML_AVAS_FOLDER + "\\{0}";
-        public static String XML_COURSE_FOLDER = XML_AVA_FOLDER + "\\{1}";
-        public static String XML_SPACE_FOLDER = XML_COURSE_FOLDER + "\\{2}";
-        public static String XML_SUBJECT_FOLDER = XML_SPACE_FOLDER + "\\{3}";
-        public static String XML_LECTURE_FOLDER = XML_SUBJECT_FOLDER + "\\{4}";
-
-        public static String XML_USER_PATH = XML_USER_FOLDER + "\\{0}.xml"; //login.xml
-        public static String XML_AVA_PATH = XML_AVA_FOLDER + "\\ava-{1}.xml";//ava_name\ava_id.xml
-        public static String XML_COURSE_PATH = XML_COURSE_FOLDER + "\\course-{2}.xml";//ava_name\course_name\course_id.xml
-        public static String XML_SPACE_PATH = XML_SPACE_FOLDER + "\\space-{3}.xml";//ava_name\course_name\space_name\space_id.xml
-        public static String XML_SUJECT_PATH = XML_SUBJECT_FOLDER + "\\subject-{4}.xml"; //ava_name\course_name\space_name\suject_id\suject_id.xml
-        public static String XML_LECTURE_PATH = XML_LECTURE_FOLDER + "\\lecture-{5}.xml";//ava_name\course_name\space_name\suject_id\lecture_id\lecture_id.xml
+        public static String XML_USER_PATH = XML_USER_FOLDER + "\\{0}.xml";
+        public static String XML_AVA_PATH = XML_AVAS_FOLDER + "\\{0}.xml";
+        public static String XML_COURSE_PATH = XML_COURSES_FOLDER + "\\{0}.xml";
+        public static String XML_SPACE_PATH = XML_SPACES_FOLDER + "\\{0}.xml";
+        public static String XML_SUJECT_PATH = XML_SUBJECTS_FOLDER + "\\{0}.xml";
+        public static String XML_LECTURE_PATH = XML_LECTURES_FOLDER + "\\{0}.xml";
         //public  const String XML_LECTURE_DATA_PATH = XML_LECTURES_FOLDER + 
 
         public static String XML_USER_TIMELINE_FOLDER = XML_USER_FOLDER + "\\timeline";
         public static String XML_USER_TIMELINE_PATH = XML_USER_TIMELINE_FOLDER + "\\{0}-timeline.xml";
-        public static String XML_SPACE_TIMELINE_PATH = XML_SPACE_FOLDER + "\\{3}-timeline.xml";
-        public static String XML_LECTURE_TIMELINE_PATH = XML_LECTURE_FOLDER + "\\{5}-timeline.xml";
+        public static String XML_SPACE_TIMELINE_PATH = XML_SPACES_FOLDER + "\\{0}-timeline.xml";
+        public static String XML_LECTURE_TIMELINE_PATH = XML_LECTURES_FOLDER + "\\{0}-timeline.xml";
 
         public const String URL_FEED_USER = "/users/{0}/statuses/timeline?types[]=Activity&types[]=Help";
         public const String URL_UPDATE_FEED_USER = "/users/{0}/statuses/timeline?types[]=Activity&types[]=Help&page={1}";

@@ -1,4 +1,23 @@
-﻿using System;
+﻿/*
+    Copyright 2013 Walter Ferreira de Lima Filho
+    
+    This file is part of ReduOffline.
+
+    ReduOffline is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    ReduOffline is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with ReduOffline.  If not, see <http://www.gnu.org/licenses/>. 
+
+*/
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,12 +40,15 @@ namespace ReduOffline.Models
         private String _id_user;
         private String _text;
         private String _date;
+        private String _space_id;        
         private String _lecture_id;
         private String _status_id;
         private String _sync_time_stamp;        
         private bool _done;        
         private TypePendingActivity _type_pending_activity;
         private Status _wrapped_status;
+        private Status _status_to_answer;
+        
 
         [XmlElement("wrapped-status")]
         public Status Wrapped_Status
@@ -70,6 +92,13 @@ namespace ReduOffline.Models
             set { _lecture_id = value; }
         }
 
+        [XmlElement("space-id")]
+        public String Space_Id
+        {
+            get { return _space_id; }
+            set { _space_id = value; }
+        }
+
         [XmlElement("type-pending-activity")]
         public TypePendingActivity Type_pending_activity
         {
@@ -89,6 +118,13 @@ namespace ReduOffline.Models
         {
             get { return _done; }
             set { _done = value; }
+        }
+
+        [XmlElement("status-to-answer")]
+        public Status Status_To_Answer
+        {
+            get { return _status_to_answer; }
+            set { _status_to_answer = value; }
         }
         
     }

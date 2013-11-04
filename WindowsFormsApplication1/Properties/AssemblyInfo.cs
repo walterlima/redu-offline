@@ -6,11 +6,25 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("ReduOffline")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("This file is part of ReduOffline." + "\n\n"+
+
+    "ReduOffline is free software: you can redistribute it and/or modify" + "\n" +
+    "it under the terms of the GNU General Public License as published by" + "\n" +
+    "the Free Software Foundation, either version 3 of the License, or" + "\n" +
+    "(at your option) any later version." + "\n\n" +
+
+    "ReduOffline is distributed in the hope that it will be useful," + "\n" +
+    "but WITHOUT ANY WARRANTY; without even the implied warranty of" + "\n" +
+    "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the" + "\n" +
+    "GNU General Public License for more details." + "\n\n" +
+
+    "You should have received a copy of the GNU General Public License" + "\n" +
+    "along with ReduOffline.  If not, see <http://www.gnu.org/licenses/>.")]
+
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("ReduOffline")]
-[assembly: AssemblyCopyright("Copyright ©  2013")]
+[assembly: AssemblyCopyright("Copyright © 2013 Walter Ferreira de Lima Filho")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

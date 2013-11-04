@@ -1,4 +1,23 @@
-﻿using ReduOffline.Models;
+﻿/*
+    Copyright 2013 Walter Ferreira de Lima Filho
+    
+    This file is part of ReduOffline.
+
+    ReduOffline is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    ReduOffline is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with ReduOffline.  If not, see <http://www.gnu.org/licenses/>. 
+
+*/
+using ReduOffline.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -6,6 +25,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using System.Xml.Linq;
 using System.Xml.Serialization;
 
 namespace ReduOffline
@@ -26,45 +46,34 @@ namespace ReduOffline
 
         public Tuple<EnvironmentRedu, List<Space>, List<Lecture>> read_ava_data(string ava_name)
         {
-            string ava_folder_path = string.Format(Constants.XML_AVA_FOLDER, ava_name);
-            string ava_xml_path = Directory.GetFiles(ava_folder_path)[0];
+            string ava_xml_path = string.Format(Constants.XML_AVA_PATH, ava_name);
             EnvironmentRedu ava = deserialize<EnvironmentRedu>(ava_xml_path);
             List<Space> spaces = new List<Space>();
             List<Lecture> lectures = new List<Lecture>();
-
-            string[] course_folder_paths = Directory.GetDirectories(ava_folder_path);
+            
             ava.Courses = new List<Course>();
-            foreach (string course_folder_path in course_folder_paths)
+            foreach (string course_id in ava.Courses_Ids)
             {
-                string course_xml_path = Directory.GetFiles(course_folder_path)[0];
-                Course course = deserialize<Course>(course_xml_path);                
-                
-                string[] space_folder_paths = Directory.GetDirectories(course_folder_path);
+                string course_xml_path = string.Format(Constants.XML_COURSE_PATH, course_id);
+                Course course = deserialize<Course>(course_xml_path);                                                
                 course.Spaces = new List<Space>();
-                foreach (string space_folder_path in space_folder_paths)
+                foreach (string space_id in course.Spaces_Ids)
                 {
-                    string[] paths = Directory.GetFiles(space_folder_path);
-                    string space_xml_path = (from path in paths where path.Contains("space") select path).First();
-                    string space_timeline_xml_path = (from path in paths where path.Contains("timeline") select path).First();
+                    string space_xml_path = string.Format(Constants.XML_SPACE_PATH, space_id);
                     Space space = deserialize<Space>(space_xml_path);
-                    space.Timeline = deserialize<List<Status>>(space_timeline_xml_path);
-
-                    string[] subject_folder_paths = Directory.GetDirectories(space_folder_path);
+                    string space_timeline_xml_path = string.Format(Constants.XML_SPACE_TIMELINE_PATH, space.Id);
+                    space.Timeline = deserialize<List<Status>>(space_timeline_xml_path);                    
                     space.Subjects = new List<Subject>();
-                    foreach (string subject_folder_path in subject_folder_paths)
+                    foreach (string subject_id in space.Subjects_Ids)
                     {
-                        string subject_xml_path = Directory.GetFiles(subject_folder_path)[0];
-                        string[] lecture_folder_paths = Directory.GetDirectories(subject_folder_path);
-
+                        string subject_xml_path = string.Format(Constants.XML_SUJECT_PATH, subject_id);                        
                         Subject subject = deserialize<Subject>(subject_xml_path);                        
                         subject.Lectures = new List<Lecture>();
-                        foreach (string lecture_folder_path in lecture_folder_paths)
+                        foreach (string lecture_id in subject.Lecture_Ids)
                         {
-                            string[] lecture_paths = Directory.GetFiles(lecture_folder_path);
-                            string lecture_xml_path = (from path in lecture_paths where path.Contains("lecture") select path).First();
-                            string lecture_timeline_xml_path = (from path in lecture_paths where path.Contains("timeline") select path).First();
-
+                            string lecture_xml_path = string.Format(Constants.XML_LECTURE_PATH, lecture_id);
                             Lecture lecture = deserialize<Lecture>(lecture_xml_path);
+                            string lecture_timeline_xml_path = string.Format(Constants.XML_LECTURE_TIMELINE_PATH, lecture.Id);
                             lecture.Timeline = deserialize<List<Status>>(lecture_timeline_xml_path);
                             subject.Lectures.Add(lecture);
                             lectures.Add(lecture);
@@ -87,6 +96,26 @@ namespace ReduOffline
             feed = feed.OrderByDescending(p => p.Created_At).ToList();
             return feed;
         }
+
+        public List<PendingActivity> read_pending_activities(string used_id)
+        {
+            List<PendingActivity> all_pa = deserialize<List<PendingActivity>>(Constants.XML_PENDING_ACTIVITY_PATH);
+            List<PendingActivity> filtered_pa = (from pa in all_pa where pa.Id_User.Equals(used_id) && !pa.Done select pa).ToList();
+            return filtered_pa;
+        }
+
+        public int read_pending_activities_max_id()
+        {
+            XDocument xmlDoc = XDocument.Load(Constants.XML_CONFIG_PATH);
+
+            var items = from item in xmlDoc.Descendants("peding-activities-id")                        
+                        select item.Element("value").Value;
+
+            int id = Int32.Parse(items.ToList()[0]);
+
+            return id;
+        }
+        
 
         private T deserialize<T>(string path)
         {

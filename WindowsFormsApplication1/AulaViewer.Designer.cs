@@ -1,4 +1,23 @@
-﻿namespace ReduOffline
+﻿/*
+    Copyright 2013 Walter Ferreira de Lima Filho
+    
+    This file is part of ReduOffline.
+
+    ReduOffline is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    ReduOffline is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with ReduOffline.  If not, see <http://www.gnu.org/licenses/>. 
+
+*/
+namespace ReduOffline
 {
     partial class AulaViewer
     {
@@ -56,6 +75,7 @@
             // lbl_nome_aula
             // 
             this.lbl_nome_aula.AutoSize = true;
+            this.lbl_nome_aula.Cursor = System.Windows.Forms.Cursors.Hand;
             this.lbl_nome_aula.Font = new System.Drawing.Font("Cambria", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbl_nome_aula.ForeColor = System.Drawing.Color.CornflowerBlue;
             this.lbl_nome_aula.Location = new System.Drawing.Point(39, 5);

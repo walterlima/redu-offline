@@ -1,4 +1,22 @@
-﻿using ReduOffline.API_Functions;
+﻿/*
+    Copyright 2013 Walter Ferreira de Lima Filho
+    
+    This file is part of ReduOffline.
+
+    ReduOffline is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    ReduOffline is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with ReduOffline.  If not, see <http://www.gnu.org/licenses/>. 
+
+*/
 using ReduOffline.Models;
 using System;
 using System.Collections.Generic;
@@ -8,7 +26,7 @@ using System.Threading.Tasks;
 
 namespace ReduOffline
 {
-    public class ReduClientOffline : UserFunctions
+    public class ReduClientOffline
     {
         private XMLReader _xml_reader;
         private XMLWriter _xml_writer;
@@ -68,7 +86,11 @@ namespace ReduOffline
             answer.User = user;
             answer.Created_At = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss") + "-03:00";
             answer.Links = new List<Link>();
-            add_temp_status(answer, PendingActivity.TypePendingActivity.AnswerStatus);
+            add_temp_status(answer, PendingActivity.TypePendingActivity.AnswerStatus, status_to_reply.Id, status_to_reply);
+            Status to_update = feed.Find(x => x.Id.Equals(status_to_reply.Id));
+            feed.Remove(to_update);
+            to_update.Answers.Add(answer);
+            feed.Insert(0, to_update);
             return feed;
         }
 
@@ -83,7 +105,7 @@ namespace ReduOffline
             status.Links = new List<Link>();            
             Link statusable = new Link(Constants.REL_STATUSABLE, "users");
             status.Links.Add(statusable);
-            add_temp_status(status, PendingActivity.TypePendingActivity.SubmitStatusUser);
+            add_temp_status(status, PendingActivity.TypePendingActivity.SubmitStatusUser, user.Id.ToString(), null);
             feed.Insert(0, status);
             return feed;
         }
@@ -99,7 +121,7 @@ namespace ReduOffline
             status.Links = new List<Link>();
             Link statusable = new Link(Constants.REL_STATUSABLE, "spaces");            
             status.Links.Add(statusable);
-            add_temp_status(status, PendingActivity.TypePendingActivity.SubmitStatusSpace);
+            add_temp_status(status, PendingActivity.TypePendingActivity.SubmitStatusSpace, space.Id, null);
             feed.Insert(0, status);
             return feed;
         }
@@ -115,21 +137,39 @@ namespace ReduOffline
             status.Links = new List<Link>();
             Link statusable = new Link(Constants.REL_STATUSABLE, "lectures");
             status.Links.Add(statusable);            
-            add_temp_status(status, PendingActivity.TypePendingActivity.SubmitStatusLecture);
+            add_temp_status(status, PendingActivity.TypePendingActivity.SubmitStatusLecture, lecture_id.Id, null);
             feed.Insert(0, status);
             return feed;
         }
 
-        public void add_temp_status(Status temp_status, PendingActivity.TypePendingActivity type)
+        public void add_temp_status(Status temp_status, PendingActivity.TypePendingActivity type, string id, Status status_to_answer)
         {
             //create pending activity
             PendingActivity pa = new PendingActivity();
-            pa.Date = temp_status.Created_At;
             pa.Id_User = temp_status.User.Id.ToString();
-            pa.Status_Id = temp_status.Id.ToString();
+            pa.Date = temp_status.Created_At;
             pa.Wrapped_Status = temp_status;
             pa.Type_pending_activity = type;
-            _xml_writer.write_new_statuses(new List<Status> { temp_status }, string.Format(Constants.XML_USER_TIMELINE_PATH, _current_user_login));//save status with a negative ID to be able to erase it after
+            pa.Status_To_Answer = status_to_answer;
+            switch (type)
+            {
+                case PendingActivity.TypePendingActivity.SubmitStatusUser:
+                    _xml_writer.write_new_statuses(new List<Status> { temp_status }, string.Format(Constants.XML_USER_TIMELINE_PATH, _current_user_login));//save status with a negative ID to be able to erase it after
+                    break;
+                case PendingActivity.TypePendingActivity.SubmitStatusSpace:
+                    pa.Space_Id = id;
+                    _xml_writer.write_new_statuses(new List<Status> { temp_status }, string.Format(Constants.XML_SPACE_TIMELINE_PATH, _current_user_login));
+                    break;
+                case PendingActivity.TypePendingActivity.SubmitStatusLecture:
+                    pa.Lecture_Id = id;
+                    _xml_writer.write_new_statuses(new List<Status> { temp_status }, string.Format(Constants.XML_LECTURE_TIMELINE_PATH, _current_user_login));
+                    break;
+                case PendingActivity.TypePendingActivity.AnswerStatus:
+                    pa.Status_Id = id;
+                    //_xml_writer.write_new_statuses(new List<Status> { temp_status }, string.Format(Constants.XML_USER_TIMELINE_PATH, _current_user_login));
+                    break;
+            }
+            
             _xml_writer.save_pending_activity(new List<PendingActivity> { pa });//save pending activity for later synchronization
         }
 
@@ -161,9 +201,9 @@ namespace ReduOffline
 
         private int get_next_status_id()
         {
-            int temp = ReduOffline.Properties.Settings.Default.PENDING_STATUS_ID;
+            int temp = _xml_reader.read_pending_activities_max_id();
             temp--;
-            ReduOffline.Properties.Settings.Default.PENDING_STATUS_ID = temp;
+            _xml_writer.save_pending_activities_max_id(temp); //TODO: just read and save when openning and closing the program
             return temp;
         }
 
