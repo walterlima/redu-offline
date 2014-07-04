@@ -26,6 +26,9 @@ using System.Xml.Serialization;
 
 namespace ReduOffline.Models
 {
+    /// <summary>
+    /// Represents an AVA inside Redu
+    /// </summary>
     [Serializable()]
     [XmlRoot("environment-redu")]
     public class EnvironmentRedu

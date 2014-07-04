@@ -33,15 +33,19 @@ namespace ReduOffline
         private ReduClientOnline _redu_online;
         private ReduOAuth _redu_oauth;
         private User _current_user;
+
         private List<EnvironmentRedu> _current_user_avas;
         private List<Course> _current_user_courses = new List<Course>();
         private List<Space> _current_user_spaces = new List<Space>();
         private List<Subject> _current_user_subjects = new List<Subject>();
         private List<Lecture> _current_user_lectures = new List<Lecture>();
+
         private List<Status> _feed;
+
         private List<Enrollment> _current_user_enrollments;
         private List<Status> _current_lecture_feed;        
-        private List<Status> _current_space_feed;        
+        private List<Status> _current_space_feed;
+
         private bool _is_first_login = true;
         private string _current_login = "";
         private string _last_seen_lecture;

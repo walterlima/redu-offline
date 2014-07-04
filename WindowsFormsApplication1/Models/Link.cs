@@ -26,6 +26,10 @@ using System.Xml.Serialization;
 
 namespace ReduOffline.Models
 {
+    /// <summary>
+    /// Auxiliar Link structure used by Redu API
+    /// Represents explicit links between many of Redu's base objects
+    /// </summary>
     [Serializable()]
     public class Link
     {

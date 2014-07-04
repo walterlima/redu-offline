@@ -65,8 +65,8 @@ namespace ReduOffline
             // 
             // panel2
             // 
-            this.panel2.BackgroundImage = global::ReduOffline.images.redu_simbolo_hidpi;
-            this.panel2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.panel2.BackgroundImage = global::ReduOffline.images.logo_redu;
+            this.panel2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.panel2.Location = new System.Drawing.Point(4, 4);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(33, 32);
@@ -96,7 +96,7 @@ namespace ReduOffline
             this.MaximumSize = new System.Drawing.Size(595, 0);
             this.MinimumSize = new System.Drawing.Size(595, 0);
             this.Name = "AvasViewer";
-            this.Size = new System.Drawing.Size(595, 58);
+            this.Size = new System.Drawing.Size(595, 39);
             this.ResumeLayout(false);
             this.PerformLayout();
 

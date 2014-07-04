@@ -94,6 +94,9 @@ namespace ReduOffline.Models
             set { _type = value; }
         }
 
+        /// <summary>
+        /// Helps identify where in the Redu hierarchy the status was posted.
+        /// </summary>
         [XmlElement("post-local")]
         public String Post_Local
         {
@@ -126,6 +129,9 @@ namespace ReduOffline.Models
             }
         }
 
+        /// <summary>
+        /// Gets the Statusable Id for the given status
+        /// </summary>
         public String Statusable_Id
         {
             get
@@ -158,6 +164,11 @@ namespace ReduOffline.Models
             set { _link_source = value; }
         }
 
+        /// <summary>
+        /// Format string to match the standard of Redy
+        /// </summary>
+        /// <param name="url"></param>
+        /// <returns></returns>
         private string format_string_to_id(string url)
         {
             url = this.reverse_string(url);
@@ -172,6 +183,11 @@ namespace ReduOffline.Models
             return url;
         }
 
+        /// <summary>
+        /// Reverses a given string
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
         private string reverse_string(string s)
         {
             char[] charArray = s.ToCharArray();
@@ -179,7 +195,11 @@ namespace ReduOffline.Models
             return new string(charArray);
         }
 
-        //override Equals method to ease the removal from List<Status>
+        /// <summary>
+        /// Overrides Equals method to ease the removal from List of Status.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         public override bool Equals(Object obj)
         {            
             Status s = obj as Status;

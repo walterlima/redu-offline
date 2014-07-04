@@ -27,12 +27,22 @@ using System.Windows.Forms;
 
 namespace ReduOffline
 {
+    /// <summary>
+    /// Holds all the constants used in the program
+    /// </summary>
     public class Constants
     {
+        /// <summary>
+        /// OAuth consumer key
+        /// </summary>
         public const String _consumerKey = "iXL5orXjX9VOP6DW7c9xvqJ74kkMNh7mFQcCB0Rp";
+        /// <summary>
+        /// OAuth consumer secret
+        /// </summary>
         public const String _consumerSecret = "depNX2Ypp1bpFG7x5BeBGxNc9QRHN4metGuCBR35";
         public const String _grant_type = "authorization_code";
 
+        //XML folders
         public static String XML_CONFIG_FOLDER = Path.GetDirectoryName(Application.ExecutablePath) + "\\config";
         public static String XML_CONFIG_PATH = XML_CONFIG_FOLDER + "\\app_config.xml";
         public static String XML_USER_CONFIG_FOLDER = XML_CONFIG_FOLDER + "\\user_config.xml";        
@@ -46,9 +56,11 @@ namespace ReduOffline
         public static String XML_AVA_THUMBNAIL_FOLDER = XML_AVAS_FOLDER + "\\{0}-thumbnails";
         public static String XML_PENDING_ACTIVITY_PATH = XML_CONFIG_FOLDER + "\\pending_activities.xml";
         
+        //URLs for authorization
         public const String AUTHORIZE_URL = "http://www.redu.com.br/oauth/authorize?client_id={0}";
         public const String ACCESS_TOKEN_URL = "http://www.redu.com.br/oauth/token?code={0}&client_id={1}&client_secret={2}&grant_type={3}";
 
+        //XML paths for querying database
         public static String XML_USER_PATH = XML_USER_FOLDER + "\\{0}.xml";
         public static String XML_AVA_PATH = XML_AVAS_FOLDER + "\\{0}.xml";
         public static String XML_COURSE_PATH = XML_COURSES_FOLDER + "\\{0}.xml";
@@ -62,6 +74,7 @@ namespace ReduOffline
         public static String XML_SPACE_TIMELINE_PATH = XML_SPACES_FOLDER + "\\{0}-timeline.xml";
         public static String XML_LECTURE_TIMELINE_PATH = XML_LECTURES_FOLDER + "\\{0}-timeline.xml";
 
+        //API URLs for interacting with Redu
         public const String URL_FEED_USER = "/users/{0}/statuses/timeline?types[]=Activity&types[]=Help";
         public const String URL_UPDATE_FEED_USER = "/users/{0}/statuses/timeline?types[]=Activity&types[]=Help&page={1}";
         public const String POST_USER_FEED_URL = "/users/{0}/statuses";
@@ -74,6 +87,7 @@ namespace ReduOffline
         public const String BASE_URL = "http://www.redu.com.br/api/";
         public const String USER_URL = "user/";
 
+        //General data keyword for ensuring proper standards
         public const String REL_ENVIRONMENT = "environment";
         public const String REL_COURSES = "courses";
         public const String REL_COURSE = "course";

@@ -26,9 +26,17 @@ using System.Xml.Serialization;
 
 namespace ReduOffline.Models
 {
+    /// <summary>
+    /// Non-existent on Redu, this class represents one activity performed on ReduOffline while there was no access to internet connection.
+    /// Each activity is saved within the program and lately synchronized with the Online server.
+    /// </summary>
     [Serializable()]
     public class PendingActivity
     {
+        /// <summary>
+        /// Represents what kind of activity was performed while offline.
+        /// Helps decide what to do when the internet connection is back on.
+        /// </summary>
         public enum TypePendingActivity
         {
             SubmitStatusUser=1,

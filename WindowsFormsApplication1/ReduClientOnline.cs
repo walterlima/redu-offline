@@ -29,11 +29,18 @@ using System.ComponentModel;
 
 namespace ReduOffline
 {
+    /// <summary>
+    /// ReduClientOnline represents the online core of the application. 
+    /// It communicates with the server through HTTP requests to get new data, send new data and synchronize offline data.
+    /// It also communicates with the database core to persist the online data for future user.
+    /// </summary>
     public class ReduClientOnline
     {
         
         private HttpRequests _http = new HttpRequests();
         private ReduOAuth _reduOAuth;
+
+        //Database connection auxiliar classes
         private XMLWriter _xml_writer;
         private XMLReader _xml_reader;
 
@@ -54,6 +61,11 @@ namespace ReduOffline
             this.bw_download_thumb_user.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bw_download_thumb_user_RunWorkerCompleted);
         }
 
+        /// <summary>
+        /// Gets the general data for the current user
+        /// </summary>
+        /// <param name="user_id"></param>
+        /// <returns></returns>
         public User get_user(string user_id)
         {
             User result = _http.get<User>(Constants.USER_URL + user_id, _reduOAuth.get_access_token());
@@ -179,7 +191,7 @@ namespace ReduOffline
         }
 
         /// <summary>
-        /// Downloads async user's thumbnails
+        /// Downloads sync or async user's thumbnails
         /// </summary>
         /// <param name="user">Current user</param>
         private void get_user_thumbnails(User user)
@@ -195,6 +207,11 @@ namespace ReduOffline
             //}
         }
 
+        /// <summary>
+        /// Concurrent function for downloading thumbnails asynchronously
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void bw_download_thumb_user_DoWork(object sender, DoWorkEventArgs e)
         {
             if ((bw_download_thumb_user.CancellationPending == true))
@@ -213,6 +230,11 @@ namespace ReduOffline
             }
         }
 
+        /// <summary>
+        /// Called when the concurrent function for downloading thumbnails assynchronously is done
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void bw_download_thumb_user_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             if ((e.Cancelled == true)) { }
@@ -237,10 +259,14 @@ namespace ReduOffline
                 _http.download_file(thumbnail.Href, String.Format(Constants.XML_AVA_THUMBNAIL_FOLDER, ava.Initials));
             }
         }
-
+        /// <summary>
+        /// HTTP Requests the timeline feed for the current user
+        /// </summary>
+        /// <param name="url">URL for the feed</param>
+        /// <returns>List of statuses representing feed</returns>
         public List<Status> get_user_feed(string url)
         {
-            //não é muito interessante o feed LOG
+            //Ignore the feed LOG
             List<Status> feed = _http.get<List<Status>>(url, _reduOAuth.get_access_token());
             feed = this.get_statuses_answers(feed);
             return feed;
@@ -277,6 +303,11 @@ namespace ReduOffline
             return feed_total;
         }
 
+        /// <summary>
+        /// HTTP Requests answers for each status of the user's timeline
+        /// </summary>
+        /// <param name="statuses">List of status</param>
+        /// <returns></returns>
         public List<Status> get_statuses_answers(List<Status> statuses)
         {
             foreach (Status status in statuses)
@@ -416,6 +447,12 @@ namespace ReduOffline
             return feed;
         }
 
+        /// <summary>
+        /// When there's internet connection this function tries to synchronize the set of
+        /// pending activities that hasn't been synchronized yet.
+        /// </summary>
+        /// <param name="feed">Current feed to be updated with new activities</param>
+        /// <returns></returns>
         public List<Status> synchronize_pending_activities(List<Status> feed)
         {
             //read pending activities for current user -- for the first moment we will just upload the activities for a logged in user
@@ -447,7 +484,7 @@ namespace ReduOffline
                     pa.Sync_Time_Stamp = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss") + "-03:00";
 
                     feed.Remove(pa.Wrapped_Status);
-                    //erase the statuses with minus IDs
+                    //erase the statuses with negative IDs
                     _xml_writer.erase_pending_statuses(new List<Tuple<Status,string>>{ new Tuple<Status,String>(pa.Wrapped_Status, path)});
                 }
                 //set pending activity as synchronized (timestamp + bool)
@@ -457,6 +494,9 @@ namespace ReduOffline
             return feed;
         }
 
+        /// <summary>
+        /// Gets the user data when they connect for the first time on ReduOffline
+        /// </summary>
         public void get_user_first_data()
         {
             //get user's data

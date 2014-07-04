@@ -26,6 +26,9 @@ using System.Xml.Serialization;
 
 namespace ReduOffline.Models
 {
+    /// <summary>
+    /// Represents a User inside Redu
+    /// </summary>
     [Serializable()]
     [XmlRoot("user")]
     public class User

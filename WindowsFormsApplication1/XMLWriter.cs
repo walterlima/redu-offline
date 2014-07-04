@@ -32,6 +32,11 @@ using System.Xml.Linq;
 
 namespace ReduOffline
 {
+    /// <summary>
+    /// XMLWriter is part of the database core of ReduOFFline.
+    /// Its main goal is to save the online data into XML for easy access and manipulation by the application.
+    /// It also deals with small logic to be able to provide the Offline feature with synchronization afterwards.
+    /// </summary>
     public class XMLWriter
     {
 

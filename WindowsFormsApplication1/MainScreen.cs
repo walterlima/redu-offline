@@ -33,6 +33,7 @@ namespace ReduOffline
 {
     public partial class MainScreen : Form
     {
+        //Helps deciding what is the state of the screen
         public enum UserView
         {
             User=1,
@@ -53,12 +54,17 @@ namespace ReduOffline
             InitializeComponent();            
         }
 
+        /// <summary>
+        /// Action when clicking the login button
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btn_login_Click(object sender, EventArgs e)
         {
-            //checa se é a primeira vez que tal pessoa loga nesta máquina
-            //se for primeira vez, deve fazer autenticação
-            //se houver internet -> autenticar
-            //se não houver -> informar e pedir para voltar quando houver internet
+            //Verifies if it's the first time the user logins on the machine
+            //If it is the first time, call for authentication
+            //If you have internet -> authenticate
+            //If not -> inform and ask to come back when there is
             if (!loginTxt.Text.Equals(string.Empty))
             {
                 int login_answer = _redu.login_procedure(loginTxt.Text);
@@ -80,6 +86,9 @@ namespace ReduOffline
             }
         }
 
+        /// <summary>
+        /// Starts the asynchronous process of loading data
+        /// </summary>
         private void call_load_process()
         {
             if (bw_load.IsBusy != true)
@@ -94,6 +103,11 @@ namespace ReduOffline
 
         }
 
+        /// <summary>
+        /// Action called when the OAuth pin is entered
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btn_pin_Click(object sender, EventArgs e)
         {
             String pin = pinTxt.Text;
@@ -109,7 +123,11 @@ namespace ReduOffline
                 //mostrar erro
             }
         }
-
+        /// <summary>
+        /// Changes the color of a panel
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void panel1_Paint(object sender, PaintEventArgs e)
         {
             Pen pen = new Pen(Color.CornflowerBlue, 0.1f);                        
@@ -123,6 +141,11 @@ namespace ReduOffline
             base.OnPaint(e);
         }
         
+        /// <summary>
+        /// Asynchronous method for loading data
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void bw_load_DoWork(object sender, DoWorkEventArgs e)
         {
             if ((bw_load.CancellationPending == true))
@@ -138,6 +161,12 @@ namespace ReduOffline
 
         private void bw_load_ProgressChanged(object sender, ProgressChangedEventArgs e) { }
 
+        /// <summary>
+        /// Called when the asynchronous load process is completed
+        /// Starts putting the data on the screen after loading
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void bw_load_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             if ((e.Cancelled == true)) { }
@@ -151,6 +180,9 @@ namespace ReduOffline
             }
         }
 
+        /// <summary>
+        /// Loads the first data on the screen: user name and images
+        /// </summary>
         private void load_data_on_screen()
         {
             string[] image_paths = Directory.GetFiles(string.Format(Constants.XML_USER_THUMBNAIL_FOLDER, _redu.Current_user.Login));
@@ -160,6 +192,11 @@ namespace ReduOffline
             load_user_feed();            
         }
         
+        /// <summary>
+        /// Creates the feed panel
+        /// </summary>
+        /// <param name="statuses"></param>
+        /// <param name="pn_feed"></param>
         private void create_status_control(List<Status> statuses, FlowLayoutPanel pn_feed)
         {                        
             for (int i = statuses.Count - 1; i >= 0; i--)
@@ -239,6 +276,11 @@ namespace ReduOffline
             }
         }
 
+        /// <summary>
+        /// Action when the button to post a status is pressed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btn_post_status_Click(object sender, EventArgs e)
         {
             if (bw_post_user.IsBusy != true)
@@ -248,6 +290,11 @@ namespace ReduOffline
             }   
         }
 
+        /// <summary>
+        /// Async function to process a posting request
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void bw_post_user_DoWork(object sender, DoWorkEventArgs e)
         {
             if ((bw_post_user.CancellationPending == true))
@@ -277,6 +324,11 @@ namespace ReduOffline
             }            
         }
 
+        /// <summary>
+        /// Called when the posting process is done
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void bw_post_user_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             switch (_user_view)
@@ -298,12 +350,21 @@ namespace ReduOffline
             
             pic_small_load.Visible = false;
         }
-
+        /// <summary>
+        /// Action when the update button is pushed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btn_update_Click(object sender, EventArgs e)
         {
             _redu.synchronize_pending_activities();
         }
 
+        /// <summary>
+        /// Call action for changing between user feed screen and avas screen
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void pn_menu_avas_Click(object sender, EventArgs e)
         {
             //load avas
@@ -315,6 +376,9 @@ namespace ReduOffline
             show_panel(pn_avas, "Compartilhe conosco suas ideias.");            
         }
 
+        /// <summary>
+        /// Charges AVA data into the panel and call it to front of the screen 
+        /// </summary>
         private void load_panel_avas()
         {
             List<EnvironmentRedu> avas = _redu.Current_User_Avas;
@@ -327,13 +391,23 @@ namespace ReduOffline
             }
             _avas_loaded = true;
         }
-
+        /// <summary>
+        /// Change screen to user timeline
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void pn_menu_mural_Click(object sender, EventArgs e)
         {
             _user_view = UserView.User;
             show_panel(pn_main_wall, "Compartilhe conosco suas ideias.");            
         }
 
+        /// <summary>
+        /// Loads Space into its panel and call it to the front
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        /// <param name="space"></param>
         private void load_disciplina(object sender, EventArgs e, Space space)
         {
             pn_disciplina.Controls.Clear();
@@ -348,6 +422,9 @@ namespace ReduOffline
             show_panel(pn_disciplina, "Compartilhe alguma ideia sobre esta disciplina");            
         }
 
+        /// <summary>
+        /// Loads timeline into its panel and calls it to the front
+        /// </summary>
         private void load_user_feed()
         {
             pn_main_wall.Controls.Clear();
@@ -356,6 +433,12 @@ namespace ReduOffline
             show_panel(pn_main_wall, "Compartilhe conosco suas ideias.");            
         }
 
+        /// <summary>
+        /// Loads lecture data into its panel and calls it to the front
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        /// <param name="lecture_id"></param>
         private void load_lecture_feed(object sender, EventArgs e, String lecture_id)
         {
             pn_lecture_or_space_feed.Controls.Clear();
@@ -367,6 +450,12 @@ namespace ReduOffline
             show_panel(pn_lecture_or_space_feed, "Compartilhe alguma ideia sobre esta aula, ou peça ajuda caso tenha dúvidas.");                        
         }
 
+        /// <summary>
+        /// Calls the panel for showing the Space feed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        /// <param name="space_id"></param>
         private void load_space_feed(object sender, EventArgs e, String space_id)
         {
             pn_lecture_or_space_feed.Controls.Clear();
@@ -409,6 +498,12 @@ namespace ReduOffline
             }
         }
 
+        /// <summary>
+        /// Trigger async method for replying a status
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        /// <param name="tuple_id_plus_text"></param>
         private void method_reply_status(object sender, EventArgs e, Tuple<Status, String> tuple_id_plus_text)
         {            
             if (bw_post_user.IsBusy != true)
@@ -418,6 +513,12 @@ namespace ReduOffline
             }   
         }
 
+        /// <summary>
+        /// Called when the async method for replying a status is completed.
+        /// Displays new information on the screen.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void bw_reply_status_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             //carregar informação na tela
@@ -487,17 +588,32 @@ namespace ReduOffline
             pn_more_status.Location = location;
         }
 
+        /// <summary>
+        /// Action to call the loading method for displaying Spaces
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void pn_menu_mural_Click_1(object sender, EventArgs e)
         {
             this.load_space_feed(null, null, _redu.Last_Seen_Space);
         }
 
+        /// <summary>
+        /// Shows notification bar
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void pn_notif_hidden_Click(object sender, EventArgs e)
         {
             pn_notif_hidden.Visible = false;
             pn_notification.Visible = true;
         }
 
+        /// <summary>
+        /// Hides notification bar
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void pn_click_hide_notf_Click(object sender, EventArgs e)
         {
             pn_notif_hidden.Visible = true;

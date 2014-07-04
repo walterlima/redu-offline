@@ -26,6 +26,9 @@ using System.Xml.Serialization;
 
 namespace ReduOffline.Models
 {
+    /// <summary>
+    /// Represents a Lecture inside Redu
+    /// </summary>
     [Serializable()]
     [XmlRoot("lecture")]
     public class Lecture
@@ -173,6 +176,9 @@ namespace ReduOffline.Models
             set { _name_ava = value; }
         }
 
+        /// <summary>
+        /// Auxiliar function for creating breadcrumbs display string.
+        /// </summary>
         public String Link_Tree
         {
             get

@@ -26,6 +26,9 @@ using System.Xml.Serialization;
 
 namespace ReduOffline.Models
 {
+    /// <summary>
+    /// Represents an Enrollment of a certain user inside Redu
+    /// </summary>
     [Serializable()]
     public class Enrollment
     {

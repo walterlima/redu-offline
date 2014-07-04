@@ -26,6 +26,9 @@ using System.Xml.Serialization;
 
 namespace ReduOffline.Models
 {
+    /// <summary>
+    /// Represents a Course inside Redu
+    /// </summary>
     [Serializable()]
     [XmlRoot("course")]
     public class Course

@@ -26,6 +26,9 @@ using System.Xml.Serialization;
 
 namespace ReduOffline.Models
 {
+    /// <summary>
+    /// Represents a thumbnail inside Redu
+    /// </summary>
     [Serializable()]
     public class Thumbnail
     {

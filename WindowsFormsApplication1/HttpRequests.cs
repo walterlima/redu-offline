@@ -40,8 +40,8 @@ namespace ReduOffline
         }
 
         /// <summary>
-        /// Does a complete OAuth GET Request according to the request URL. Converts the received data to return
-        /// as a result the type T of object demanded as a request.
+        /// Does a complete OAuth + REST API GET Request according to the request URL. Converts the received data to return
+        /// as a resulting object of the type T demanded at first.
         /// </summary>
         /// <typeparam name="T">Any type of the Redu API</typeparam>
         /// <param name="demand">Request URL</param>
@@ -63,6 +63,16 @@ namespace ReduOffline
             return content ;
         }
 
+        /// <summary>
+        /// Does a complete OAuth + REST API POST request according to request URL and given parameters. Converts the received data to return
+        /// as a resulting object of the type T demanded at first.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="post_url"></param>
+        /// <param name="access_token"></param>
+        /// <param name="dic"></param>
+        /// <param name="json"></param>
+        /// <returns></returns>
         public T post<T>(string post_url, string access_token, Dictionary<string, object> dic, String json) where T : new()
         {
             if (post_url.Equals(string.Empty))
@@ -91,6 +101,11 @@ namespace ReduOffline
             return content;
         }
 
+        /// <summary>
+        /// Performs an OAuth + REST API DELETE request.
+        /// Not implemented.
+        /// </summary>
+        /// <returns></returns>
         public string delete()
         {
             return "";
@@ -118,6 +133,11 @@ namespace ReduOffline
             //MessageBox.Show("Download efetuado!");
         }
 
+        /// <summary>
+        /// Format URL for downloading following the format of API
+        /// </summary>
+        /// <param name="url"></param>
+        /// <returns></returns>
         private string format_url_download(string url)
         {
             url = this.reverse_string(url);
@@ -131,6 +151,11 @@ namespace ReduOffline
             return this.reverse_string(nova);
         }
 
+        /// <summary>
+        /// Reverses the given string object
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
         private string reverse_string(string s)
         {
             char[] charArray = s.ToCharArray();

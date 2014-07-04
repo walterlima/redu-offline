@@ -26,6 +26,9 @@ using System.Xml.Serialization;
 
 namespace ReduOffline.Models
 {
+    /// <summary>
+    /// Represents a Subject inside Redu
+    /// </summary>
     [Serializable()]
     [XmlRoot("subject")]
     public class Subject

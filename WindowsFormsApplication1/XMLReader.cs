@@ -30,6 +30,9 @@ using System.Xml.Serialization;
 
 namespace ReduOffline
 {
+    /// <summary>
+    /// XMLReader is in charge of reading the Offline data and return the ontime object for the application.
+    /// </summary>
     public class XMLReader
     {
 
@@ -37,6 +40,12 @@ namespace ReduOffline
 
         private XmlSerializer serializer;
 
+        /// <summary>
+        /// Reads the user data according to a login.
+        /// TODO: check if the login is available
+        /// </summary>
+        /// <param name="login">User's login</param>
+        /// <returns>User data as a User objectt</returns>
         public User read_user_data(string login)
         {
             string path = String.Format(Constants.XML_USER_PATH, login);
@@ -44,6 +53,17 @@ namespace ReduOffline
             return user;
         }        
 
+        /// <summary>
+        /// Reads all the data from the AVA according to the stablished architecture.
+        /// Architecute
+        /// AVA
+        /// > Courses
+        /// >> Spaces
+        /// >>> Subjects
+        /// >>>> Lectures
+        /// </summary>
+        /// <param name="ava_name">AVA name</param>
+        /// <returns>Ava as an EnvironmentRedu object</returns>
         public Tuple<EnvironmentRedu, List<Space>, List<Lecture>> read_ava_data(string ava_name)
         {
             string ava_xml_path = string.Format(Constants.XML_AVA_PATH, ava_name);
@@ -89,6 +109,11 @@ namespace ReduOffline
             return new Tuple<EnvironmentRedu,List<Space>,List<Lecture>>(ava, spaces, lectures);
         }
 
+        /// <summary>
+        /// Reads the feed data for the current user.
+        /// </summary>
+        /// <param name="login">Current user login</param>
+        /// <returns>A list of Status objects</returns>
         public List<Status> read_feed_data(string login)
         {
             string feed_path = string.Format(Constants.XML_USER_TIMELINE_PATH, login);
@@ -97,6 +122,11 @@ namespace ReduOffline
             return feed;
         }
 
+        /// <summary>
+        /// Reads the pending activies (offline activities)
+        /// </summary>
+        /// <param name="used_id"></param>
+        /// <returns></returns>
         public List<PendingActivity> read_pending_activities(string used_id)
         {
             List<PendingActivity> all_pa = deserialize<List<PendingActivity>>(Constants.XML_PENDING_ACTIVITY_PATH);
@@ -104,6 +134,10 @@ namespace ReduOffline
             return filtered_pa;
         }
 
+        /// <summary>
+        /// Auxiliar function for setting the id for each pending activity
+        /// </summary>
+        /// <returns></returns>
         public int read_pending_activities_max_id()
         {
             XDocument xmlDoc = XDocument.Load(Constants.XML_CONFIG_PATH);

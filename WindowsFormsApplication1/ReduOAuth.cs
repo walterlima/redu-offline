@@ -31,12 +31,16 @@ using System.Runtime.InteropServices;
 
 namespace ReduOffline
 {
+    /// <summary>
+    /// Auxiliar class for OAuth validation and file control
+    /// </summary>
     public class ReduOAuth
     {        
         private String _access_token = "";
         private String _login = "";
         private XmlDocument _xml_user;
 
+        //Auxiliar variable to help reading JSON answers
         private Dictionary<string, string> tokens = new Dictionary<string, string>();
 
         public ReduOAuth()
@@ -82,6 +86,9 @@ namespace ReduOffline
             
         }
 
+        /// <summary>
+        /// Verifies if the configuration XML files exist, if not create them.
+        /// </summary>
         private void verify_xml_exists()
         {
             if (!File.Exists(Constants.XML_USER_CONFIG_FOLDER))
@@ -114,6 +121,10 @@ namespace ReduOffline
             }
         }
         
+        /// <summary>
+        /// Calls the browser to demand the user authorization, based on client key
+        /// </summary>
+        /// <param name="login"></param>
         public void demand_authorize(String login)
         {            
             System.Diagnostics.Process.Start(string.Format(Constants.AUTHORIZE_URL, Constants._consumerKey));
@@ -141,13 +152,22 @@ namespace ReduOffline
             _access_token = _test_access_token;
             return !_test_access_token.Equals(string.Empty);            
         }
-
+        /// <summary>
+        /// Verifies if the specified user has already user ReduOffline on this computer
+        /// </summary>
+        /// <param name="login">Current user login</param>
+        /// <returns></returns>
         public bool user_has_data(string login)
         {
-            bool retorno = File.Exists(string.Format(Constants.XML_USER_PATH,  login));
-            return retorno;
+            bool ret = File.Exists(string.Format(Constants.XML_USER_PATH,  login));
+            return ret;
         }
-
+        /// <summary>
+        /// Final step of OAuth authorization. Given the pin code, sends HTTP request for final validation.
+        /// Then receives the token and stores it on ontime variable for furthen stockage
+        /// </summary>
+        /// <param name="pin">OAuth pin</param>
+        /// <returns>True as success, False as failure</returns>
         public bool enter_authorization_pin(String pin)
         {
             HttpWebRequest _authorize_client = WebRequest.Create(string.Format(Constants.ACCESS_TOKEN_URL, pin, Constants._consumerKey, Constants._consumerSecret, Constants._grant_type)) as HttpWebRequest; //, _grant_type, _redirect_uri)) as HttpWebRequest;
@@ -171,7 +191,10 @@ namespace ReduOffline
             else
                 return false;
         }
-
+        /// <summary>
+        /// Saves on XML the token for the user authorization
+        /// </summary>
+        /// <param name="dic"></param>
         private void add_new_user_acess_token(Dictionary<String, String> dic)
         {   
             //salvando access token do usuario

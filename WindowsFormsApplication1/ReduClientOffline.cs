@@ -26,11 +26,20 @@ using System.Threading.Tasks;
 
 namespace ReduOffline
 {
+    /// <summary>
+    /// ReduClientOffline represents the offline core of the application. 
+    /// It communicates only with the database core to gather the offline stored previously and allow the user
+    /// to still work on Redu.
+    /// It hosts the logic for creating Pending Activities to postpone the sending of datas the server.
+    /// </summary>
     public class ReduClientOffline
     {
+        //Database connection auxiliar classes
         private XMLReader _xml_reader;
         private XMLWriter _xml_writer;
+
         private string _current_user_login;
+
         private List<EnvironmentRedu> _current_user_avas = new List<EnvironmentRedu>();
         private List<Space> _current_user_spaces = new List<Space>();
         private List<Lecture> _current_user_lectures = new List<Lecture>();
@@ -41,24 +50,43 @@ namespace ReduOffline
             this._xml_reader = xml_reader;
         }
 
+        /// <summary>
+        /// Loads offline user data from XML database
+        /// </summary>
+        /// <param name="user_id"></param>
+        /// <returns></returns>
         public User get_user(string user_id)
         {
             User result = _xml_reader.read_user_data(user_id);
             return result;
         }
 
+        /// <summary>
+        /// Loads offline data of current user from XML database
+        /// </summary>
+        /// <returns></returns>
         public User get_me()
         {
             User result = _xml_reader.read_user_data(_current_user_login);            
             return result;
         }
 
+        /// <summary>
+        /// Gets enrollment from a certain user
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
         public List<Enrollment> get_enrollment_by_user(User user)
         {
             List<Enrollment> result = user.Enrollments;
             return result;
         }
 
+        /// <summary>
+        /// Gets user AVAs complete data according to their enrollments
+        /// </summary>
+        /// <param name="enrollments"></param>
+        /// <returns></returns>
         public List<EnvironmentRedu> get_environment_by_user(List<Enrollment> enrollments)
         {
             List<EnvironmentRedu> avas = new List<EnvironmentRedu>();
@@ -77,6 +105,16 @@ namespace ReduOffline
 
         }
 
+        /// <summary>
+        /// Creates a Status answer for the specified status.
+        /// Stores the answer offline as a pending activity.
+        /// Adds the answer to its related Status in the current feed list.
+        /// </summary>
+        /// <param name="feed"></param>
+        /// <param name="user"></param>
+        /// <param name="status_to_reply"></param>
+        /// <param name="text"></param>
+        /// <returns></returns>
         public List<Status> reply_status(List<Status> feed, User user, Status status_to_reply, string text)
         {
             Status answer = new Status();
@@ -94,6 +132,15 @@ namespace ReduOffline
             return feed;
         }
 
+        /// <summary>
+        /// Creates a new Status object in the user Timeline.
+        /// Links the Status to a Pending Activity.
+        /// Adds the Status to the current feed list.
+        /// </summary>
+        /// <param name="feed"></param>
+        /// <param name="user"></param>
+        /// <param name="text"></param>
+        /// <returns></returns>
         public List<Status> post_status_user(List<Status> feed, User user, string text)
         {
             Status status = new Status();
@@ -110,6 +157,16 @@ namespace ReduOffline
             return feed;
         }
 
+        /// <summary>
+        /// Creates a new Status object in the specified Space Timeline.
+        /// Links the Status to a Pending Activity.
+        /// Adds the Status to the current feed list.
+        /// </summary>
+        /// <param name="feed"></param>
+        /// <param name="space"></param>
+        /// <param name="user"></param>
+        /// <param name="text"></param>
+        /// <returns></returns>
         public List<Status> post_status_space(List<Status> feed, Space space, User user, string text)
         {
             Status status = new Status();
@@ -126,6 +183,17 @@ namespace ReduOffline
             return feed;
         }
 
+        /// <summary>
+        /// Creates a new Status object in the specified Space Timeline.
+        /// Links the Status to a Pending Activity.
+        /// Adds the Status to the current feed list.
+        /// </summary>
+        /// <param name="feed"></param>
+        /// <param name="user"></param>
+        /// <param name="lecture_id"></param>
+        /// <param name="text"></param>
+        /// <param name="is_help">Whether the post is a help post or not</param>
+        /// <returns></returns>
         public List<Status> post_status_lecture(List<Status> feed, User user, Lecture lecture_id, string text, bool is_help)
         {
             Status status = new Status();
@@ -142,6 +210,14 @@ namespace ReduOffline
             return feed;
         }
 
+        /// <summary>
+        /// Creates a Pending Activity for the given Status.
+        /// Calls the database to store the Pending Activity.
+        /// </summary>
+        /// <param name="temp_status"></param>
+        /// <param name="type"></param>
+        /// <param name="id"></param>
+        /// <param name="status_to_answer"></param>
         public void add_temp_status(Status temp_status, PendingActivity.TypePendingActivity type, string id, Status status_to_answer)
         {
             //create pending activity
@@ -173,6 +249,11 @@ namespace ReduOffline
             _xml_writer.save_pending_activity(new List<PendingActivity> { pa });//save pending activity for later synchronization
         }
 
+        /// <summary>
+        /// Reads all the feed for the specified user
+        /// </summary>
+        /// <param name="login"></param>
+        /// <returns></returns>
         public List<Status> get_user_feed(string login)
         {
             List<Status> feed = _xml_reader.read_feed_data(login);
@@ -199,6 +280,11 @@ namespace ReduOffline
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Auxiliar function to help build a consistent ID system.
+        /// Gets the next ID stored in XMLs.
+        /// </summary>
+        /// <returns></returns>
         private int get_next_status_id()
         {
             int temp = _xml_reader.read_pending_activities_max_id();
@@ -206,6 +292,7 @@ namespace ReduOffline
             _xml_writer.save_pending_activities_max_id(temp); //TODO: just read and save when openning and closing the program
             return temp;
         }
+
 
         public void set_current_user_login(string login)
         {

@@ -26,6 +26,9 @@ using System.Xml.Serialization;
 
 namespace ReduOffline.Models
 {
+    /// <summary>
+    /// Represents the Social Networks that a user has registered on Redu.
+    /// </summary>
     [Serializable()]
     public class Social_Network
     {
