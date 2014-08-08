@@ -8,7 +8,7 @@
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ReduOffline</RootNamespace>
-    <AssemblyName>WindowsFormsApplication1</AssemblyName>
+    <AssemblyName>ReduOffline</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -34,6 +34,9 @@
   <PropertyGroup>
     <StartupObject>ReduOffline.Program</StartupObject>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>logo_redu.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.5.0.6\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -57,65 +60,71 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AnswerViewer.cs">
+    <Compile Include="Constants.cs" />
+    <Compile Include="CustomControls\AnswerViewer.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="AnswerViewer.Designer.cs">
+    <Compile Include="CustomControls\AnswerViewer.Designer.cs">
       <DependentUpon>AnswerViewer.cs</DependentUpon>
     </Compile>
-    <Compile Include="AulaViewer.cs">
+    <Compile Include="CustomControls\AulaViewer.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="AulaViewer.Designer.cs">
+    <Compile Include="CustomControls\AulaViewer.Designer.cs">
       <DependentUpon>AulaViewer.cs</DependentUpon>
     </Compile>
-    <Compile Include="AvasViewer.cs">
+    <Compile Include="CustomControls\AvasViewer.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="AvasViewer.Designer.cs">
+    <Compile Include="CustomControls\AvasViewer.Designer.cs">
       <DependentUpon>AvasViewer.cs</DependentUpon>
     </Compile>
-    <Compile Include="Constants.cs" />
-    <Compile Include="CursoViewer.cs">
+    <Compile Include="CustomControls\CursoViewer.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="CursoViewer.Designer.cs">
+    <Compile Include="CustomControls\CursoViewer.Designer.cs">
       <DependentUpon>CursoViewer.cs</DependentUpon>
     </Compile>
-    <Compile Include="DisciplinaViewer.cs">
+    <Compile Include="CustomControls\DisciplinaViewer.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="DisciplinaViewer.Designer.cs">
+    <Compile Include="CustomControls\DisciplinaViewer.Designer.cs">
       <DependentUpon>DisciplinaViewer.cs</DependentUpon>
     </Compile>
-    <Compile Include="ModuloDetailViewer.cs">
+    <Compile Include="CustomControls\ModuloDetailViewer.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ModuloDetailViewer.Designer.cs">
+    <Compile Include="CustomControls\ModuloDetailViewer.Designer.cs">
       <DependentUpon>ModuloDetailViewer.cs</DependentUpon>
     </Compile>
-    <Compile Include="ModulosViewer.cs">
+    <Compile Include="CustomControls\ModulosViewer.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ModulosViewer.Designer.cs">
+    <Compile Include="CustomControls\ModulosViewer.Designer.cs">
       <DependentUpon>ModulosViewer.cs</DependentUpon>
     </Compile>
-    <Compile Include="StatusAnswerControl.cs">
+    <Compile Include="CustomControls\StatusAnswerControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="StatusAnswerControl.Designer.cs">
+    <Compile Include="CustomControls\StatusAnswerControl.Designer.cs">
       <DependentUpon>StatusAnswerControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="StatusControl.cs">
+    <Compile Include="CustomControls\StatusControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="StatusControl.Designer.cs">
+    <Compile Include="CustomControls\StatusControl.Designer.cs">
       <DependentUpon>StatusControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="StatusUser.cs">
+    <Compile Include="CustomControls\StatusLecture.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="StatusUser.Designer.cs">
+    <Compile Include="CustomControls\StatusLecture.Designer.cs">
+      <DependentUpon>StatusLecture.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CustomControls\StatusUser.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="CustomControls\StatusUser.Designer.cs">
       <DependentUpon>StatusUser.cs</DependentUpon>
     </Compile>
     <Compile Include="HttpRequests.cs" />
@@ -148,39 +157,36 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReduClientOffline.cs" />
     <Compile Include="ReduClientOnline.cs" />
-    <Compile Include="StatusLecture.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="StatusLecture.Designer.cs">
-      <DependentUpon>StatusLecture.cs</DependentUpon>
-    </Compile>
     <Compile Include="XMLReader.cs" />
     <Compile Include="XMLWriter.cs" />
-    <EmbeddedResource Include="AnswerViewer.resx">
+    <EmbeddedResource Include="CustomControls\AnswerViewer.resx">
       <DependentUpon>AnswerViewer.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="AulaViewer.resx">
+    <EmbeddedResource Include="CustomControls\AulaViewer.resx">
       <DependentUpon>AulaViewer.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="AvasViewer.resx">
+    <EmbeddedResource Include="CustomControls\AvasViewer.resx">
       <DependentUpon>AvasViewer.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="CursoViewer.resx">
+    <EmbeddedResource Include="CustomControls\CursoViewer.resx">
       <DependentUpon>CursoViewer.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="DisciplinaViewer.resx">
+    <EmbeddedResource Include="CustomControls\DisciplinaViewer.resx">
       <DependentUpon>DisciplinaViewer.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ModuloDetailViewer.resx">
+    <EmbeddedResource Include="CustomControls\ModuloDetailViewer.resx">
       <DependentUpon>ModuloDetailViewer.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ModulosViewer.resx">
+    <EmbeddedResource Include="CustomControls\ModulosViewer.resx">
       <DependentUpon>ModulosViewer.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="StatusAnswerControl.resx">
+    <EmbeddedResource Include="CustomControls\StatusAnswerControl.resx">
       <DependentUpon>StatusAnswerControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="StatusUser.resx">
+    <EmbeddedResource Include="CustomControls\StatusLecture.resx">
+      <DependentUpon>StatusLecture.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CustomControls\StatusUser.resx">
       <DependentUpon>StatusUser.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainScreen.resx">
@@ -200,9 +206,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="StatusLecture.resx">
-      <DependentUpon>StatusLecture.cs</DependentUpon>
-    </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -219,9 +222,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\loading.gif" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="loading-blue.gif" />
   </ItemGroup>
   <ItemGroup>
     <None Include="loading_blue.gif" />
@@ -263,6 +263,7 @@
     <Folder Include="Tools\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="logo_redu.ico" />
     <None Include="logo_redu.png" />
     <None Include="notification_hidden.png" />
     <None Include="update.png" />
